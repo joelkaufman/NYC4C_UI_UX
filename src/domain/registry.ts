@@ -17,3 +17,12 @@ export function getModuleDef(id: ModuleId): ModuleDef {
   if (!def) throw new Error(`Unknown module ${id}`);
   return def;
 }
+
+if (import.meta.env.DEV) {
+  // MODULE_TITLES is a light copy for the request list; warn if it drifts from the registry.
+  import('./module-titles').then(({ MODULE_TITLES }) => {
+    for (const def of PROCESS_REGISTRY.onboarding) {
+      if (MODULE_TITLES[def.id] !== def.title) console.warn(`MODULE_TITLES.${def.id} is out of sync with the registry`);
+    }
+  });
+}

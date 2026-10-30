@@ -39,7 +39,7 @@ export function RequestListPage() {
   return (
     <div className="mx-auto w-full max-w-[960px] px-4 py-8 sm:px-6 sm:py-12">
       <header className="mb-8">
-        <h1 className="text-2xl font-semibold tracking-[-0.02em] text-[hsl(var(--label))]">
+        <h1 className="text-[34px] font-bold leading-10 tracking-[-0.03em] text-[hsl(var(--label))]">
           {greeting}, {firstName}
         </h1>
         {requests.length ? (
@@ -51,7 +51,7 @@ export function RequestListPage() {
               </li>
             ) : null}
             {counts.open ? (
-              <li className="inline-flex h-7 items-center gap-1.5 rounded-full bg-primary-subtle px-3 text-[13px] font-medium text-primary">
+              <li className="inline-flex h-7 items-center gap-1.5 rounded-full bg-[hsl(var(--highlight-soft))] px-3 text-[13px] font-medium text-[hsl(var(--highlight))]">
                 <CircleDot className="h-3.5 w-3.5" aria-hidden />
                 {counts.open} in progress
               </li>

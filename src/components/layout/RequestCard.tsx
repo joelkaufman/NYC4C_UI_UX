@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Lock } from 'lucide-react';
 import type { ProviderRequest } from '@/domain/types';
 import { currentModule } from '@/domain/lifecycle';
-import { getModuleDef } from '@/domain/registry';
+import { MODULE_TITLES } from '@/domain/module-titles';
 import { Button } from '@/components/ui/button';
 import { moduleStatusSpec, StatusBadge, type StatusSpec } from '@/components/shared/status';
 import { AlertCircle, CheckCircle2, CircleDot, Clock } from 'lucide-react';
@@ -26,7 +26,7 @@ export function RequestCard({ request }: { request: ProviderRequest }) {
   const approved = request.modules.filter((m) => m.status === 'approved').length;
   const total = request.modules.length;
   const cur = currentModule(request);
-  const curDef = cur ? getModuleDef(cur.id) : undefined;
+  const curDef = cur ? { title: MODULE_TITLES[cur.id] } : undefined;
   const action = request.status === 'completed' ? 'View' : request.status === 'not_started' ? 'Start' : 'Continue';
   const href = `/requests/${request.id}`;
 
@@ -35,7 +35,7 @@ export function RequestCard({ request }: { request: ProviderRequest }) {
       <div className="p-5 sm:p-6">
         <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
           <div className="min-w-0">
-            <h2 className="text-base font-semibold text-foreground">
+            <h2 className="text-lg font-semibold tracking-[-0.015em] text-foreground">
               <Link to={href} className="rounded-sm hover:underline focus-ring">
                 {request.title}
               </Link>
@@ -87,10 +87,10 @@ export function RequestCard({ request }: { request: ProviderRequest }) {
                       'bg-status-warning-bg text-status-warning-fg': spec.tone === 'warning',
                     },
                   )}
-                  title={`${getModuleDef(m.id).title}: ${spec.label}`}
+                  title={`${MODULE_TITLES[m.id]}: ${spec.label}`}
                 >
                   <Icon className="h-3 w-3" aria-hidden />
-                  {getModuleDef(m.id).title}
+                  {MODULE_TITLES[m.id]}
                   <span className="sr-only">: {spec.label}</span>
                 </li>
               );

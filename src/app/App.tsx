@@ -1,13 +1,17 @@
 import * as React from 'react';
-import { BrowserRouter, Navigate, Outlet, Route, Routes, useParams } from 'react-router-dom';
+import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { Toaster } from '@/components/ui/toaster';
 import { startESignSync } from '@/mock/api';
-import { useRequest } from '@/mock/store';
-import { landingTarget, stepHref } from '@/domain/progress';
-import { RequestListPage } from '@/pages/RequestListPage';
-import { ProcessPage } from '@/pages/ProcessPage';
-import { AdminPage } from '@/pages/AdminPage';
+// Route-level code splitting: each page loads only when visited.
+const RequestListPage = React.lazy(() => import('@/pages/RequestListPage').then((m) => ({ default: m.RequestListPage })));
+const ProcessPage = React.lazy(() => import('@/pages/ProcessPage').then((m) => ({ default: m.ProcessPage })));
+const RequestRedirect = React.lazy(() => import('@/pages/ProcessPage').then((m) => ({ default: m.RequestRedirect })));
+const AdminPage = React.lazy(() => import('@/pages/AdminPage').then((m) => ({ default: m.AdminPage })));
+
+function PageFallback() {
+  return <div className="min-h-[50vh]" aria-busy />;
+}
 import { NotFound } from '@/pages/NotFound';
 import { TopBar } from './TopBar';
 
@@ -45,19 +49,12 @@ function Layout() {
       </a>
       <TopBar />
       <ErrorBoundary>
-        <Outlet />
+        <React.Suspense fallback={<PageFallback />}>
+          <Outlet />
+        </React.Suspense>
       </ErrorBoundary>
     </div>
   );
-}
-
-/** /requests/:id → current module, first step with issues. */
-function RequestRedirect() {
-  const { requestId } = useParams();
-  const request = useRequest(requestId);
-  if (!request) return <NotFound />;
-  const t = landingTarget(request);
-  return <Navigate to={stepHref(request.id, t.moduleId, t.stepId)} replace />;
 }
 
 export function App() {

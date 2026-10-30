@@ -120,17 +120,17 @@ export function ModuleSidebar(props: Parameters<typeof ModuleList>[0] & { reques
         My requests
       </Link>
 
-      <h2 className="mt-5 text-[22px] font-semibold leading-7 tracking-[-0.02em] text-[hsl(var(--label))]">{props.requestTitle}</h2>
+      <h2 className="mt-5 text-[24px] font-bold leading-[30px] tracking-[-0.025em] text-[hsl(var(--label))]">{props.requestTitle}</h2>
       <p className="mt-1 text-xs text-muted-foreground tabular">Started {formatDate(props.createdAt)}</p>
 
       <div className="mt-6">
         <div className="flex items-end justify-between">
           <span className="text-sm text-muted-foreground">Progress</span>
-          <span className="text-[28px] font-semibold leading-none tracking-[-0.02em] text-primary tabular" aria-label={`${pct}%`}>
+          <span className="text-[34px] font-bold leading-none tracking-[-0.03em] text-[hsl(var(--progress-ink))] tabular" aria-label={`${pct}%`}>
             {shownPct}%
           </span>
         </div>
-        <div className="mt-2.5 h-2.5 overflow-hidden rounded-full bg-primary/10" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-label="Overall progress">
+        <div className="mt-2.5 h-2.5 overflow-hidden rounded-full bg-[hsl(var(--lime)/0.15)]" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-label="Overall progress">
           <div className="h-full rounded-full bg-[hsl(var(--lime))] transition-[width] duration-500 ease-out" style={{ width: `${pct}%` }} />
         </div>
         <p className="mt-2.5 text-[13px] text-muted-foreground">

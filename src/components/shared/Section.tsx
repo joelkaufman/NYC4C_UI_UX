@@ -44,7 +44,7 @@ export function Section({
       <header className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <h2 id={id} className="text-[17px] font-semibold tracking-[-0.01em] text-[hsl(var(--label))]">
+            <h2 id={id} className="text-[19px] font-semibold tracking-[-0.015em] text-[hsl(var(--label))]">
               {title}
             </h2>
             {count > 0 ? (

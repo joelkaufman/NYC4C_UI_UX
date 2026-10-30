@@ -7,3 +7,4 @@ dist
 *.tsbuildinfo
 .impeccable/review
 .impeccable/questions
+.vite

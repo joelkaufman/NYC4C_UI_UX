@@ -43,7 +43,7 @@ export function StepShell({
         )}
       >
         <div className="min-w-0 flex-1">
-          <h1 ref={headingRef} tabIndex={-1} className={cn('text-2xl font-semibold tracking-[-0.02em] text-[hsl(var(--label))] outline-none', titleInTabs && 'lg:sr-only')}>
+          <h1 ref={headingRef} tabIndex={-1} className={cn('text-[28px] font-bold tracking-[-0.025em] text-[hsl(var(--label))] outline-none', titleInTabs && 'lg:sr-only')}>
             {title}
           </h1>
           {description ? <p className={cn('max-w-[68ch] text-[15px] text-muted-foreground', titleInTabs ? 'mt-1.5 lg:mt-0' : 'mt-1.5')}>{description}</p> : null}

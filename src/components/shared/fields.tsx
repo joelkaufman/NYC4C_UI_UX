@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { AlertCircle, Eye, EyeOff } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Eye, EyeOff } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -7,7 +7,7 @@ import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { formatDate, formatPhone, formatSSN, maskSSN } from '@/lib/format';
 import { cn } from '@/lib/utils';
-import type { BindProps } from './step-context';
+import { useStepContext, type BindProps } from './step-context';
 import { HelperButton } from './HelperButton';
 import type { HelperDef } from '@/domain/types';
 
@@ -30,7 +30,7 @@ interface CommonProps {
 export function FieldLabel({ htmlFor, id, label, required, helper }: { htmlFor?: string; id?: string; label: string; required?: boolean; helper?: HelperDef }) {
   return (
     <div className="flex min-h-5 items-center justify-between gap-2">
-      <label htmlFor={htmlFor} id={id} className="text-[13px] font-medium text-[hsl(var(--label))]">
+      <label htmlFor={htmlFor} id={id} className="text-[13px] font-medium text-[hsl(var(--label))] transition-colors duration-150 group-focus-within/field:text-primary">
         {label}
         {required ? (
           <>
@@ -72,7 +72,7 @@ function FieldFrame({
   labelAsGroup,
 }: CommonProps & { id: string; error?: string; children: React.ReactNode; labelAsGroup?: boolean }) {
   return (
-    <div className={cn('grid min-w-0 content-start gap-1.5', className)} data-field={id}>
+    <div className={cn('group/field grid min-w-0 content-start gap-1.5', className)} data-field={id}>
       <FieldLabel htmlFor={labelAsGroup ? undefined : id} id={`${id}-label`} label={label} required={required} helper={helper} />
       {children}
       <FieldError id={`${id}-error`} message={error} />
@@ -116,6 +116,24 @@ export function FieldRow({ cols = 2, className, children }: { cols?: 2 | 3; clas
 
 // ---------------------------------------------------------------- inputs
 
+/** True once a required field holds a value the step's validation accepts. */
+function useDone(id: string, required: boolean | undefined, value: unknown, error?: string) {
+  const ctx = useStepContext();
+  const filled = value !== undefined && value !== null && String(value).trim() !== '';
+  return !!required && filled && !error && !ctx.issues.some((i) => i.targetId === id);
+}
+
+/** Small green check inside a completed required field. */
+function DoneMark({ show }: { show: boolean }) {
+  if (!show) return null;
+  return (
+    <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-status-success-fg">
+      <CheckCircle2 className="motion-check-pop h-[18px] w-[18px]" aria-hidden />
+      <span className="sr-only">Complete</span>
+    </span>
+  );
+}
+
 type TextProps = BindProps<string | undefined> &
   CommonProps & {
     placeholder?: string;
@@ -126,11 +144,14 @@ type TextProps = BindProps<string | undefined> &
   };
 
 export function TextField({ id, value, onChange, onBlur, error, readOnly, hidden, label, required, help, helper, className, placeholder, type = 'text', autoComplete, inputMode, maxLength }: TextProps) {
+  const done = useDone(id, required, value, error);
   if (hidden) return null;
   if (readOnly) return <ReadOnlyField label={label} value={value} className={className} />;
   return (
     <FieldFrame id={id} label={label} required={required} help={help} error={error} helper={helper} className={className}>
+      <div className="relative">
       <Input
+        className={done ? 'pr-10' : undefined}
         id={id}
         type={type}
         value={value ?? ''}
@@ -144,6 +165,8 @@ export function TextField({ id, value, onChange, onBlur, error, readOnly, hidden
         aria-required={required || undefined}
         aria-describedby={describedBy(id, help, error)}
       />
+      <DoneMark show={done} />
+      </div>
     </FieldFrame>
   );
 }
@@ -169,11 +192,14 @@ export function TextareaField({ id, value, onChange, onBlur, error, readOnly, hi
 }
 
 export function DateField({ id, value, onChange, onBlur, error, readOnly, hidden, label, required, help, helper, className, max, min }: TextProps & { max?: string; min?: string }) {
+  const done = useDone(id, required, value, error);
   if (hidden) return null;
   if (readOnly) return <ReadOnlyField label={label} value={formatDate(value)} className={className} />;
   return (
     <FieldFrame id={id} label={label} required={required} help={help} error={error} helper={helper} className={className}>
+      <div className="relative">
       <Input
+        className={done ? 'pr-10' : undefined}
         id={id}
         type="date"
         value={value ?? ''}
@@ -185,6 +211,8 @@ export function DateField({ id, value, onChange, onBlur, error, readOnly, hidden
         aria-required={required || undefined}
         aria-describedby={describedBy(id, help, error)}
       />
+      <DoneMark show={done} />
+      </div>
     </FieldFrame>
   );
 }

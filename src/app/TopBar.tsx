@@ -4,7 +4,10 @@ import { PRODUCT_NAME, PRODUCT_SUBTITLE } from '@/config';
 import { useStore } from '@/mock/store';
 import { formatDateTime, initials } from '@/lib/format';
 import { Sheet, SheetBody, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { AdminPanel } from '@/admin/AdminPanel';
+import * as React from 'react';
+
+// The dev admin panel is rarely opened; load it on demand.
+const AdminPanel = React.lazy(() => import('@/admin/AdminPanel').then((m) => ({ default: m.AdminPanel })));
 
 /** Navy band with a lime rule: wordmark left; save state, provider and dev panel right. */
 export function TopBar() {
@@ -33,7 +36,7 @@ export function TopBar() {
           ) : null}
           <div className="flex items-center gap-2.5">
             <span className="hidden text-sm text-foreground lg:inline">{provider.name}</span>
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-neutral-200 text-xs font-semibold text-neutral-700" aria-label={provider.name} role="img">
+            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[hsl(var(--highlight-soft))] text-xs font-semibold text-[hsl(var(--highlight))]" aria-label={provider.name} role="img">
               {initials(provider.name)}
             </span>
           </div>
@@ -56,7 +59,9 @@ export function TopBar() {
                 </SheetDescription>
               </SheetHeader>
               <SheetBody className="mt-4">
-                <AdminPanel initialRequestId={match?.params.requestId} />
+                <React.Suspense fallback={<p className="text-sm text-muted-foreground">Loading…</p>}>
+                  <AdminPanel initialRequestId={match?.params.requestId} />
+                </React.Suspense>
               </SheetBody>
             </SheetContent>
           </Sheet>

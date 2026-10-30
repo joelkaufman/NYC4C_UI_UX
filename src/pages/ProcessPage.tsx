@@ -13,7 +13,7 @@ import { ModuleBanner } from '@/components/shared/ModuleBanner';
 import { StepIssuesProvider } from '@/components/shared/step-context';
 import { RequestChangesDialog } from '@/components/shared/RequestChangesDialog';
 import { ModuleSidebar } from '@/components/layout/ModuleSidebar';
-import { MODULE_HUES, MODULE_ICONS } from '@/components/layout/module-status';
+import { MODULE_ICONS } from '@/components/layout/module-status';
 import { MobileProcessBar } from '@/components/layout/MobileProcessBar';
 import { StepCircle, StepPath } from '@/components/layout/StepPath';
 import { StepFooter, type FooterPrimary } from '@/components/layout/StepFooter';
@@ -48,6 +48,15 @@ function focusTarget(targetId: string) {
   const focusable = el.matches('input,button,textarea,select,[tabindex]') ? el : el.querySelector<HTMLElement>('input,button,textarea,[role="radio"],[tabindex]');
   (focusable ?? el).focus({ preventScroll: true });
   return true;
+}
+
+/** /requests/:id → current module, first step with issues. */
+export function RequestRedirect() {
+  const { requestId } = useParams();
+  const request = useRequest(requestId);
+  if (!request) return <NotFound />;
+  const t = landingTarget(request);
+  return <Navigate to={stepHref(request.id, t.moduleId, t.stepId)} replace />;
 }
 
 export function ProcessPage() {
@@ -306,16 +315,18 @@ export function ProcessPage() {
           {layout === 'classic' ? (
             <>
               <div
-                className="hidden items-center gap-4 border-b px-6 py-4 lg:flex lg:px-8"
+                className="hidden items-center gap-8 border-b px-6 pb-5 pt-6 lg:flex lg:px-8"
               >
-                <span className="flex h-10 w-8 shrink-0 items-center justify-center" style={{ color: MODULE_HUES[instance.id].fg }} aria-hidden>
-                  <ModuleGlyph className="h-6 w-6" />
-                </span>
-                <div className="min-w-0 flex-1">
-                  <span className="block text-[13px] text-muted-foreground tabular">
-                    Module {moduleIdx + 1} of {request.modules.length}
+                <div className="flex min-w-0 flex-1 items-center gap-4">
+                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[hsl(var(--highlight-soft))] text-[hsl(var(--highlight))]" aria-hidden>
+                    <ModuleGlyph className="h-6 w-6" />
                   </span>
-                  <span className="block truncate text-xl font-semibold leading-7 tracking-[-0.02em]">{def.title}</span>
+                  <div className="min-w-0">
+                    <span className="block text-[13px] font-medium text-[hsl(var(--highlight))] tabular">
+                      Module {moduleIdx + 1} of {request.modules.length}
+                    </span>
+                    <span className="block truncate text-[30px] font-semibold leading-9 tracking-[-0.025em] text-foreground">{def.title}</span>
+                  </div>
                 </div>
               </div>
               {model.steps.length > 1 && editable ? (

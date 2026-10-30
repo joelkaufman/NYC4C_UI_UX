@@ -14,7 +14,7 @@ export function HelperButton({ helper, compact = false, className }: { helper: H
         <button
           type="button"
           className={cn(
-            'inline-flex shrink-0 items-center gap-1.5 rounded-md font-medium text-primary transition-colors hover:bg-primary-subtle/50 focus-ring',
+            'inline-flex shrink-0 items-center gap-1.5 rounded-md font-medium text-[hsl(var(--help))] transition-colors hover:bg-[hsl(var(--help)/0.08)] focus-ring',
             compact ? 'h-6 px-1.5 text-2xs' : 'h-8 px-2.5 text-xs',
             className,
           )}

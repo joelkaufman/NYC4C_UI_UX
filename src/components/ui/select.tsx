@@ -14,7 +14,7 @@ const SelectTrigger = React.forwardRef<
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
-      'field-control flex h-11 w-full items-center justify-between px-3.5 py-2 text-[15px] [&>span]:line-clamp-1 data-[placeholder]:text-[hsl(var(--placeholder))]',
+      'field-control group flex h-11 w-full items-center justify-between px-3.5 py-2 text-[15px] [&>span]:line-clamp-1 data-[placeholder]:text-[hsl(var(--placeholder))]',
       className,
     )}
     aria-invalid={invalid || undefined}
@@ -22,7 +22,7 @@ const SelectTrigger = React.forwardRef<
   >
     {children}
     <SelectPrimitive.Icon asChild>
-      <ChevronDown className="h-4 w-4 text-primary" aria-hidden />
+      <ChevronDown className="h-4 w-4 text-primary transition-transform duration-200 group-data-[state=open]:rotate-180" aria-hidden />
     </SelectPrimitive.Icon>
   </SelectPrimitive.Trigger>
 ));

@@ -30,7 +30,13 @@
     --primary-foreground: 0 0% 100%;
     --label: 240 6% 10%; /* labels stay near-black, Apple style */
     --ring: 190 82% 30%;
-    --lime: 190 70% 40%; /* progress and current tab (name kept for compatibility) */
+    --lime: 190 70% 40%; /* progress fill: bars and current tab (name kept for compatibility) */
+
+    /* Accent roles: a palette can recolour these without touching actions or status. */
+    --highlight: 190 82% 30%; /* module tile, "Module N of 5", avatar, in-progress chip */
+    --highlight-soft: 190 60% 94%;
+    --progress-ink: 190 82% 30%; /* the big progress figure */
+    --help: 190 82% 30%; /* help links */
     --lime-ink: 190 70% 28%;
     --lime-wash: 190 60% 95%;
 
