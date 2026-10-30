@@ -1,0 +1,820 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-30T00:15:00-04:00",
+  "title": "Design System: Provider Portal",
+  "extensions": {
+    "colorMeta": {
+      "teal": {
+        "role": "primary",
+        "displayName": "Clinical Teal",
+        "tonalRamp": [
+          "#001023",
+          "#002C40",
+          "#004A5E",
+          "#00697E",
+          "#2E8AA0",
+          "#54ACC3",
+          "#7CD3EA",
+          "#C6F8FF"
+        ],
+        "canonical": "hsl(190 82% 30%)",
+        "cssVariable": "--primary"
+      },
+      "teal-hover": {
+        "role": "primary",
+        "displayName": "Teal Hover",
+        "tonalRamp": [
+          "#001020",
+          "#002C3C",
+          "#00495B",
+          "#14687A",
+          "#3D899C",
+          "#60ABBE",
+          "#86D1E5",
+          "#CCF7FF"
+        ],
+        "canonical": "hsl(190 84% 25%)",
+        "cssVariable": "--primary-hover"
+      },
+      "teal-subtle": {
+        "role": "primary",
+        "displayName": "Teal Subtle",
+        "tonalRamp": [
+          "#001023",
+          "#002C40",
+          "#004A5E",
+          "#00697E",
+          "#2E8AA0",
+          "#54ACC3",
+          "#7CD3EA",
+          "#C6F8FF"
+        ],
+        "canonical": "hsl(190 60% 94%)",
+        "cssVariable": "--primary-subtle"
+      },
+      "progress-teal": {
+        "role": "primary",
+        "displayName": "Progress Teal",
+        "tonalRamp": [
+          "#001125",
+          "#002D42",
+          "#004C61",
+          "#006B81",
+          "#078CA3",
+          "#41AFC6",
+          "#6CD5ED",
+          "#C0FAFF"
+        ],
+        "canonical": "hsl(190 70% 40%)",
+        "cssVariable": "--lime",
+        "note": "CSS variable named --lime for compatibility; role is progress and the current-tab underline."
+      },
+      "label": {
+        "role": "neutral",
+        "displayName": "Label",
+        "tonalRamp": [
+          "#0B0B0E",
+          "#242427",
+          "#3F3F43",
+          "#5D5D61",
+          "#7D7D81",
+          "#9E9EA2",
+          "#C3C4C8",
+          "#EEEEF1"
+        ],
+        "canonical": "hsl(240 6% 10%)",
+        "cssVariable": "--foreground / --label"
+      },
+      "secondary-label": {
+        "role": "neutral",
+        "displayName": "Secondary Label",
+        "tonalRamp": [
+          "#0B0B0E",
+          "#242428",
+          "#3F3F44",
+          "#5D5D62",
+          "#7D7D82",
+          "#9E9EA3",
+          "#C3C3C9",
+          "#EEEEF1"
+        ],
+        "canonical": "hsl(240 2% 43%)",
+        "cssVariable": "--muted-foreground / --placeholder"
+      },
+      "grouped-ground": {
+        "role": "neutral",
+        "displayName": "Grouped Ground",
+        "tonalRamp": [
+          "#0B0B0E",
+          "#242428",
+          "#3F3F44",
+          "#5D5D62",
+          "#7D7D82",
+          "#9E9EA3",
+          "#C3C3C9",
+          "#EEEEF1"
+        ],
+        "canonical": "hsl(240 24% 96%)",
+        "cssVariable": "--background"
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Surface",
+        "tonalRamp": [
+          "#0B0B0E",
+          "#242428",
+          "#3F3F44",
+          "#5D5D62",
+          "#7D7D82",
+          "#9E9EA3",
+          "#C3C3C9",
+          "#EEEEF1"
+        ],
+        "canonical": "hsl(0 0% 100%)",
+        "cssVariable": "--card"
+      },
+      "field-fill": {
+        "role": "neutral",
+        "displayName": "Field Fill",
+        "tonalRamp": [
+          "#0B0B0E",
+          "#242428",
+          "#3F3F44",
+          "#5D5D62",
+          "#7D7D82",
+          "#9E9EA3",
+          "#C3C3C9",
+          "#EEEEF1"
+        ],
+        "canonical": "hsl(240 8% 95%)",
+        "cssVariable": "--field"
+      },
+      "field-hover": {
+        "role": "neutral",
+        "displayName": "Field Hover",
+        "tonalRamp": [
+          "#0B0B0E",
+          "#242428",
+          "#3F3F44",
+          "#5D5D62",
+          "#7D7D82",
+          "#9E9EA3",
+          "#C3C3C9",
+          "#EEEEF1"
+        ],
+        "canonical": "hsl(240 7% 92%)",
+        "cssVariable": "--field-hover"
+      },
+      "muted-ground": {
+        "role": "neutral",
+        "displayName": "Muted Ground",
+        "tonalRamp": [
+          "#0B0B0E",
+          "#242428",
+          "#3F3F44",
+          "#5D5D62",
+          "#7D7D82",
+          "#9E9EA3",
+          "#C3C3C9",
+          "#EEEEF1"
+        ],
+        "canonical": "hsl(240 11% 95%)",
+        "cssVariable": "--muted"
+      },
+      "separator": {
+        "role": "neutral",
+        "displayName": "Separator",
+        "tonalRamp": [
+          "#0B0B0E",
+          "#242428",
+          "#3F3F44",
+          "#5D5D62",
+          "#7D7D82",
+          "#9E9EA3",
+          "#C3C3C9",
+          "#EEEEF1"
+        ],
+        "canonical": "hsl(240 6% 89%)",
+        "cssVariable": "--border"
+      },
+      "grey-700": {
+        "role": "neutral",
+        "displayName": "Grey 700",
+        "tonalRamp": [
+          "#0B0B0B",
+          "#242424",
+          "#404040",
+          "#5D5D5D",
+          "#7D7D7D",
+          "#9E9E9E",
+          "#C4C4C4",
+          "#EEEEEE"
+        ],
+        "note": "Tailwind neutral palette, used as raw utilities."
+      },
+      "grey-600": {
+        "role": "neutral",
+        "displayName": "Grey 600",
+        "tonalRamp": [
+          "#0B0B0B",
+          "#242424",
+          "#404040",
+          "#5D5D5D",
+          "#7D7D7D",
+          "#9E9E9E",
+          "#C4C4C4",
+          "#EEEEEE"
+        ],
+        "note": "Tailwind neutral palette, used as raw utilities."
+      },
+      "grey-500": {
+        "role": "neutral",
+        "displayName": "Grey 500",
+        "tonalRamp": [
+          "#0B0B0B",
+          "#242424",
+          "#404040",
+          "#5D5D5D",
+          "#7D7D7D",
+          "#9E9E9E",
+          "#C4C4C4",
+          "#EEEEEE"
+        ],
+        "note": "Tailwind neutral palette, used as raw utilities."
+      },
+      "grey-400": {
+        "role": "neutral",
+        "displayName": "Grey 400",
+        "tonalRamp": [
+          "#0B0B0B",
+          "#242424",
+          "#404040",
+          "#5D5D5D",
+          "#7D7D7D",
+          "#9E9E9E",
+          "#C4C4C4",
+          "#EEEEEE"
+        ],
+        "note": "Tailwind neutral palette, used as raw utilities."
+      },
+      "grey-300": {
+        "role": "neutral",
+        "displayName": "Grey 300",
+        "tonalRamp": [
+          "#0B0B0B",
+          "#242424",
+          "#404040",
+          "#5D5D5D",
+          "#7D7D7D",
+          "#9E9E9E",
+          "#C4C4C4",
+          "#EEEEEE"
+        ],
+        "note": "Tailwind neutral palette, used as raw utilities."
+      },
+      "grey-200": {
+        "role": "neutral",
+        "displayName": "Grey 200",
+        "tonalRamp": [
+          "#0B0B0B",
+          "#242424",
+          "#404040",
+          "#5D5D5D",
+          "#7D7D7D",
+          "#9E9E9E",
+          "#C4C4C4",
+          "#EEEEEE"
+        ],
+        "note": "Tailwind neutral palette, used as raw utilities."
+      },
+      "success": {
+        "role": "status",
+        "displayName": "Success",
+        "tonalRamp": [
+          "#001500",
+          "#003200",
+          "#005018",
+          "#1A7037",
+          "#409156",
+          "#63B376",
+          "#89DA9B",
+          "#CDFDD6"
+        ],
+        "canonical": "hsl(140 60% 28%)",
+        "cssVariable": "--status-success-fg"
+      },
+      "success-ground": {
+        "role": "status",
+        "displayName": "Success Ground",
+        "tonalRamp": [
+          "#001500",
+          "#003200",
+          "#005018",
+          "#1A7037",
+          "#409156",
+          "#63B376",
+          "#89DA9B",
+          "#CDFDD6"
+        ],
+        "canonical": "hsl(135 45% 94%)",
+        "cssVariable": "--status-success-bg"
+      },
+      "danger": {
+        "role": "status",
+        "displayName": "Danger",
+        "tonalRamp": [
+          "#300000",
+          "#520000",
+          "#761613",
+          "#993A32",
+          "#BE5B51",
+          "#E47C71",
+          "#FFA295",
+          "#FFDBD2"
+        ],
+        "canonical": "hsl(0 75% 42%)",
+        "cssVariable": "--status-danger-fg"
+      },
+      "danger-ground": {
+        "role": "status",
+        "displayName": "Danger Ground",
+        "tonalRamp": [
+          "#300000",
+          "#520000",
+          "#761613",
+          "#993A32",
+          "#BE5B51",
+          "#E47C71",
+          "#FFA295",
+          "#FFDBD2"
+        ],
+        "canonical": "hsl(0 85% 97%)",
+        "cssVariable": "--status-danger-bg"
+      },
+      "warning": {
+        "role": "status",
+        "displayName": "Warning",
+        "tonalRamp": [
+          "#2E0000",
+          "#500000",
+          "#722000",
+          "#954100",
+          "#BA622E",
+          "#DF8451",
+          "#FFAA77",
+          "#FFE0C1"
+        ],
+        "canonical": "hsl(25 85% 37%)",
+        "cssVariable": "--status-warning-fg"
+      },
+      "warning-ground": {
+        "role": "status",
+        "displayName": "Warning Ground",
+        "tonalRamp": [
+          "#2E0000",
+          "#500000",
+          "#722000",
+          "#954100",
+          "#BA622E",
+          "#DF8451",
+          "#FFAA77",
+          "#FFE0C1"
+        ],
+        "canonical": "hsl(32 90% 95%)",
+        "cssVariable": "--status-warning-bg"
+      },
+      "info": {
+        "role": "status",
+        "displayName": "Info",
+        "tonalRamp": [
+          "#07003C",
+          "#16175D",
+          "#2D367E",
+          "#4956A1",
+          "#6776C5",
+          "#8798E9",
+          "#ABBEFF",
+          "#DEECFF"
+        ],
+        "canonical": "hsl(232 40% 42%)",
+        "cssVariable": "--status-info-fg"
+      },
+      "info-ground": {
+        "role": "status",
+        "displayName": "Info Ground",
+        "tonalRamp": [
+          "#07003C",
+          "#16175D",
+          "#2D367E",
+          "#4956A1",
+          "#6776C5",
+          "#8798E9",
+          "#ABBEFF",
+          "#DEECFF"
+        ],
+        "canonical": "hsl(232 50% 96%)",
+        "cssVariable": "--status-info-bg"
+      },
+      "neutral-status": {
+        "role": "status",
+        "displayName": "Neutral Status",
+        "tonalRamp": [
+          "#0B0B0E",
+          "#242427",
+          "#3F3F43",
+          "#5D5D61",
+          "#7D7D81",
+          "#9E9EA2",
+          "#C3C3C8",
+          "#EEEEF1"
+        ],
+        "canonical": "hsl(240 2% 40%)",
+        "cssVariable": "--status-neutral-fg"
+      },
+      "neutral-ground": {
+        "role": "status",
+        "displayName": "Neutral Ground",
+        "tonalRamp": [
+          "#0B0B0E",
+          "#242427",
+          "#3F3F43",
+          "#5D5D61",
+          "#7D7D81",
+          "#9E9EA2",
+          "#C3C3C8",
+          "#EEEEF1"
+        ],
+        "canonical": "hsl(240 8% 94%)",
+        "cssVariable": "--status-neutral-bg"
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The overall progress percentage in the rail. Figures only."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Step title (24px); the rail request title uses 22px."
+      },
+      "module-title": {
+        "displayName": "Module title",
+        "purpose": "Module name in the panel header."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Section titles, 17px semibold."
+      },
+      "input": {
+        "displayName": "Input",
+        "purpose": "Text inside filled fields."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Values, banner text, buttons (600), rail module names (600)."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Every field label: near-black 13px medium."
+      },
+      "meta": {
+        "displayName": "Meta",
+        "purpose": "Help text, field errors, section descriptions, dates, Module N of 5."
+      },
+      "badge": {
+        "displayName": "Badge",
+        "purpose": "Status badges, issue counts, step-circle numerals, the Saved pill. The 12px floor."
+      }
+    },
+    "shadows": [
+      {
+        "name": "panel",
+        "value": "0 1px 2px rgba(0,0,0,0.04), 0 6px 24px rgba(0,0,0,0.05)",
+        "purpose": "Step panel and request cards."
+      },
+      {
+        "name": "selected-row",
+        "value": "0 1px 2px rgba(0,0,0,0.05)",
+        "purpose": "White selected row in the rail."
+      },
+      {
+        "name": "raised-segment",
+        "value": "0 1px 2px rgba(16,40,48,0.10), 0 1px 4px rgba(16,40,48,0.06)",
+        "purpose": "Selected segment of a segmented control."
+      },
+      {
+        "name": "editing-item",
+        "value": "0 2px 10px rgba(16,40,48,0.08)",
+        "purpose": "Repeatable-list item open for editing."
+      },
+      {
+        "name": "menu",
+        "value": "0 8px 24px rgba(16,40,48,0.12)",
+        "purpose": "Select menus."
+      },
+      {
+        "name": "overlay",
+        "value": "0 1px 2px 0 rgb(0 0 0 / 0.05)",
+        "purpose": "Dialogs, sheets, tooltips, toasts."
+      },
+      {
+        "name": "footer-lift",
+        "value": "0 -1px 3px 0 rgb(15 23 42 / 0.06)",
+        "purpose": "Sticky step footer."
+      },
+      {
+        "name": "field-focus",
+        "value": "0 0 0 4px hsl(var(--primary) / 0.14)",
+        "purpose": "Focused filled field; danger at 14% when invalid."
+      },
+      {
+        "name": "approved-halo",
+        "value": "0 0 0 3px hsl(var(--status-success-bg))",
+        "purpose": "Ring around an approved module's rail circle."
+      },
+      {
+        "name": "focus-ring",
+        "value": "0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ring))",
+        "purpose": "2px teal focus ring offset 2px."
+      }
+    ],
+    "materials": [
+      {
+        "name": "translucent-chrome",
+        "value": "background: rgb(255 255 255 / .8); backdrop-filter: blur(24px) saturate(1.5); border-bottom: 1px solid rgb(0 0 0 / .06)",
+        "purpose": "Sticky header; the phone module bar uses 85% white."
+      }
+    ],
+    "motion": [
+      {
+        "name": "state",
+        "value": "150ms ease",
+        "purpose": "Colour, background, border and halo changes on fields, buttons, tabs and circles."
+      },
+      {
+        "name": "step-enter",
+        "value": "240ms cubic-bezier(0.16, 1, 0.3, 1); opacity .35 to 1, translateY 4px to 0",
+        "purpose": "Step content entering."
+      },
+      {
+        "name": "check-pop",
+        "value": "280ms cubic-bezier(0.16, 1, 0.3, 1); scale .6 to 1",
+        "purpose": "Checks and issue marks appearing in circles."
+      },
+      {
+        "name": "note-in",
+        "value": "180ms cubic-bezier(0.16, 1, 0.3, 1); opacity 0 to 1, translateY -3px to 0",
+        "purpose": "Field errors, issue counts, item tiles."
+      },
+      {
+        "name": "progress",
+        "value": "width 500ms ease-out",
+        "purpose": "Progress bar fills."
+      },
+      {
+        "name": "upload-indeterminate",
+        "value": "upload 1s ease-in-out infinite",
+        "purpose": "Indeterminate bar while a file uploads."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "none",
+        "purpose": "All animations and transitions collapse under prefers-reduced-motion."
+      }
+    ],
+    "containers": [
+      {
+        "name": "process-max",
+        "value": "1480px",
+        "purpose": "Centred container for the process page and header contents; gutters 32px, 48px from 1280px."
+      },
+      {
+        "name": "rail",
+        "value": "260px / 280px at xl",
+        "purpose": "Module rail content width (plus a 12px left bleed)."
+      },
+      {
+        "name": "step-measure",
+        "value": "880px",
+        "purpose": "Step content measure inside the panel (min 32px side padding); hairlines span full width."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "xl",
+        "value": "1280px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Teal action at the bottom right of the step footer: Next, Submit module, Sign now.",
+      "html": "<button class=\"ds-btn-primary\">Next <svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"m12 5 7 7-7 7\"/></svg></button>",
+      "css": ".ds-btn-primary { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Geist Variable', system-ui, 'Segoe UI', sans-serif; letter-spacing: -0.003em; display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; border: none; border-radius: 10px; font: inherit; font-size: 14px; line-height: 20px; font-weight: 600; cursor: pointer; transition: background-color 150ms; background: hsl(var(--primary)); color: #fff; } .ds-btn-primary:hover { background: hsl(var(--primary-hover)); } .ds-btn-primary:focus-visible { outline: none; box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ring)); } .ds-btn-primary:disabled { opacity: .5; pointer-events: none; }"
+    },
+    {
+      "name": "Filled Button",
+      "kind": "button",
+      "refersTo": "button-filled",
+      "description": "Secondary action as a soft grey fill: Choose file, Request new document, View.",
+      "html": "<button class=\"ds-btn-filled\">Choose file</button>",
+      "css": ".ds-btn-filled { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Geist Variable', system-ui, 'Segoe UI', sans-serif; letter-spacing: -0.003em; display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; border: none; border-radius: 10px; font: inherit; font-size: 14px; line-height: 20px; font-weight: 600; cursor: pointer; transition: background-color 150ms; background: hsl(var(--field)); color: hsl(var(--foreground)); } .ds-btn-filled:hover { background: hsl(var(--field-hover)); } .ds-btn-filled:focus-visible { outline: none; box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ring)); }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Quiet action: Back, View, Replace, Remove.",
+      "html": "<button class=\"ds-btn-ghost\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m12 19-7-7 7-7\"/><path d=\"M19 12H5\"/></svg> Back</button>",
+      "css": ".ds-btn-ghost { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Geist Variable', system-ui, 'Segoe UI', sans-serif; letter-spacing: -0.003em; display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; border: none; border-radius: 10px; font: inherit; font-size: 14px; line-height: 20px; font-weight: 600; cursor: pointer; transition: background-color 150ms; background: transparent; color: hsl(var(--foreground)); } .ds-btn-ghost:hover { background: hsl(var(--muted)); } .ds-btn-ghost:focus-visible { outline: none; box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ring)); }"
+    },
+    {
+      "name": "Filled Text Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "13px medium near-black label over a 44px filled field: white with a teal edge and halo on focus, red tint when invalid.",
+      "html": "<div class=\"ds-fields\"><div class=\"ds-field\"><label class=\"ds-label\" for=\"ds-ln\">Legal last name<span class=\"ds-req\" aria-hidden=\"true\">*</span></label><input id=\"ds-ln\" class=\"ds-fc\" placeholder=\"Gonzalez\"></div><div class=\"ds-field\"><label class=\"ds-label\" for=\"ds-zip\">ZIP code<span class=\"ds-req\" aria-hidden=\"true\">*</span></label><input id=\"ds-zip\" class=\"ds-fc\" aria-invalid=\"true\" value=\"9021\"><p class=\"ds-err\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M12 8v4M12 16h.01\"/></svg>Enter a 5-digit ZIP code.</p></div></div>",
+      "css": ".ds-fields { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Geist Variable', system-ui, 'Segoe UI', sans-serif; letter-spacing: -0.003em; display: grid; gap: 16px; max-width: 320px; } .ds-field { display: grid; gap: 6px; } .ds-label { font-size: 13px; font-weight: 500; color: hsl(var(--label)); } .ds-req { margin-left: 2px; color: hsl(var(--status-danger-fg)); } .ds-fc { height: 44px; padding: 4px 14px; border: 1px solid transparent; border-radius: 10px; background: hsl(var(--field)); color: hsl(var(--foreground)); font: inherit; font-size: 15px; transition: background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease; } .ds-fc::placeholder { color: hsl(var(--placeholder)); } .ds-fc:hover { background: hsl(var(--field-hover)); } .ds-fc:focus-visible { outline: none; background: hsl(var(--card)); border-color: hsl(var(--primary)); box-shadow: 0 0 0 4px hsl(var(--primary) / 0.14); } .ds-fc[aria-invalid='true'] { background: hsl(var(--status-danger-bg)); border-color: hsl(var(--status-danger-fg) / 0.55); } .ds-fc[aria-invalid='true']:focus-visible { background: hsl(var(--card)); border-color: hsl(var(--status-danger-fg)); box-shadow: 0 0 0 4px hsl(var(--status-danger-fg) / 0.14); } .ds-err { display: flex; gap: 6px; align-items: flex-start; margin: 0; font-size: 13px; color: hsl(var(--status-danger-fg)); } .ds-err svg { margin-top: 3px; flex-shrink: 0; }"
+    },
+    {
+      "name": "Segmented Control",
+      "kind": "input",
+      "refersTo": "segmented-option",
+      "description": "Yes/No questions: a filled track with a raised white selected segment and dark text.",
+      "html": "<div class=\"ds-seg\" role=\"radiogroup\" aria-label=\"Do you have a middle name?\"><button class=\"ds-seg-item\" role=\"radio\" aria-checked=\"true\">Yes</button><button class=\"ds-seg-item\" role=\"radio\" aria-checked=\"false\">No</button></div>",
+      "css": ".ds-seg { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Geist Variable', system-ui, 'Segoe UI', sans-serif; letter-spacing: -0.003em; display: inline-flex; gap: 4px; padding: 4px; border-radius: 10px; background: hsl(var(--field)); } .ds-seg-item { height: 36px; min-width: 64px; padding: 0 16px; border: none; border-radius: 16px; background: transparent; color: #525252; font: inherit; font-size: 14px; font-weight: 500; cursor: pointer; transition: background-color 150ms, color 150ms, box-shadow 150ms; } .ds-seg-item:hover { color: hsl(var(--foreground)); } .ds-seg-item[aria-checked='true'] { background: hsl(var(--card)); color: hsl(var(--foreground)); font-weight: 600; box-shadow: 0 1px 2px rgba(16,40,48,0.10), 0 1px 4px rgba(16,40,48,0.06); } .ds-seg-item:focus-visible { outline: none; box-shadow: 0 0 0 2px hsl(var(--ring)); }"
+    },
+    {
+      "name": "Status Badges",
+      "kind": "chip",
+      "refersTo": "status-badge",
+      "description": "One status vocabulary: icon + label + tone, 24px pill.",
+      "html": "<div class=\"ds-badges\"><span class=\"ds-badge ds-badge-success\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"m9 12 2 2 4-4\"/></svg>Approved</span><span class=\"ds-badge ds-badge-danger\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M12 8v4M12 16h.01\"/></svg>Needs attention</span><span class=\"ds-badge ds-badge-primary\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><circle cx=\"12\" cy=\"12\" r=\"1\"/></svg>Ready to sign</span><span class=\"ds-badge ds-badge-info\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M12 6v6l4 2\"/></svg>In review</span><span class=\"ds-badge ds-badge-warning\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M12 8v4M12 16h.01\"/></svg>Change requested</span></div>",
+      "css": ".ds-badges { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Geist Variable', system-ui, 'Segoe UI', sans-serif; letter-spacing: -0.003em; display: flex; flex-wrap: wrap; gap: 8px; } .ds-badge { display: inline-flex; align-items: center; gap: 4px; height: 24px; padding: 0 8px; border: 1px solid; border-radius: 9999px; font-size: 12px; line-height: 16px; font-weight: 500; white-space: nowrap; } .ds-badge-success { background: hsl(var(--status-success-bg)); color: hsl(var(--status-success-fg)); border-color: hsl(var(--status-success-fg) / .2); } .ds-badge-danger { background: hsl(var(--status-danger-bg)); color: hsl(var(--status-danger-fg)); border-color: hsl(var(--status-danger-fg) / .2); } .ds-badge-info { background: hsl(var(--status-info-bg)); color: hsl(var(--status-info-fg)); border-color: hsl(var(--status-info-fg) / .2); } .ds-badge-warning { background: hsl(var(--status-warning-bg)); color: hsl(var(--status-warning-fg)); border-color: hsl(var(--status-warning-fg) / .2); } .ds-badge-primary { background: hsl(var(--primary-subtle) / .6); color: hsl(var(--primary)); border-color: hsl(var(--primary) / .2); }"
+    },
+    {
+      "name": "Header",
+      "kind": "nav",
+      "refersTo": "top-bar",
+      "description": "Translucent white header with a hairline: teal product mark, Saved pill, provider avatar.",
+      "html": "<header class=\"ds-topbar\"><div class=\"ds-brand\"><span class=\"ds-mark\" aria-hidden=\"true\">PP</span><span><span class=\"ds-name\">Provider Portal</span><span class=\"ds-sub\">Onboarding</span></span></div><div class=\"ds-right\"><span class=\"ds-saved\">Saved</span><span class=\"ds-time\">Last saved Oct 29, 9:04 PM</span><span class=\"ds-avatar\" role=\"img\" aria-label=\"Maria Gonzalez\">MG</span></div></header>",
+      "css": ".ds-topbar { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Geist Variable', system-ui, 'Segoe UI', sans-serif; letter-spacing: -0.003em; display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 56px; padding: 0 32px; background: rgb(255 255 255 / .8); -webkit-backdrop-filter: blur(24px) saturate(1.5); backdrop-filter: blur(24px) saturate(1.5); border-bottom: 1px solid rgb(0 0 0 / .06); color: hsl(var(--foreground)); } .ds-brand { display: flex; align-items: center; gap: 12px; } .ds-mark { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 16px; background: hsl(var(--primary)); color: #fff; font-size: 14px; font-weight: 600; letter-spacing: -0.02em; } .ds-name { display: block; font-size: 15px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.25; } .ds-sub { display: block; font-size: 13px; color: hsl(var(--muted-foreground)); } .ds-right { display: flex; align-items: center; gap: 12px; } .ds-saved { padding: 2px 10px; border-radius: 9999px; background: hsl(var(--status-success-bg)); color: hsl(var(--status-success-fg)); font-size: 12px; line-height: 16px; font-weight: 600; } .ds-time { font-size: 13px; color: hsl(var(--muted-foreground)); font-variant-numeric: tabular-nums; } .ds-avatar { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 9999px; background: #E5E5E5; color: #404040; font-size: 13px; font-weight: 600; }"
+    },
+    {
+      "name": "Step Tabs",
+      "kind": "nav",
+      "refersTo": "step-tab",
+      "description": "Sub-step tabs: numbered circles, chevrons between, teal underline on the current tab, red only for walked-past issues.",
+      "html": "<nav class=\"ds-tabs\" aria-label=\"Steps in Information\"><button class=\"ds-tab\"><span class=\"ds-circle ds-circle-done\" aria-hidden=\"true\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M20 6 9 17l-5-5\"/></svg></span><span>Personal</span></button><span class=\"ds-chev\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m9 18 6-6-6-6\"/></svg></span><button class=\"ds-tab ds-tab-current\" aria-current=\"step\"><span class=\"ds-circle ds-circle-current\" aria-hidden=\"true\">2</span><span>Addresses</span></button><span class=\"ds-chev\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m9 18 6-6-6-6\"/></svg></span><button class=\"ds-tab ds-tab-issue\"><span class=\"ds-circle ds-circle-issue\" aria-hidden=\"true\">!</span><span>Household</span></button><span class=\"ds-chev\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m9 18 6-6-6-6\"/></svg></span><button class=\"ds-tab\"><span class=\"ds-circle\" aria-hidden=\"true\">4</span><span>Education</span></button></nav>",
+      "css": ".ds-tabs { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Geist Variable', system-ui, 'Segoe UI', sans-serif; letter-spacing: -0.003em; display: flex; align-items: stretch; border-bottom: 1px solid hsl(var(--border)); padding: 0 20px; background: hsl(var(--card)); } .ds-chev { display: flex; align-self: center; margin: 0 4px; color: #A3A3A3; } .ds-tab { display: flex; align-items: center; gap: 8px; height: 48px; margin-bottom: -1px; padding: 0 12px; border: none; border-bottom: 3px solid transparent; background: none; color: #404040; font: inherit; font-size: 14px; cursor: pointer; transition: border-color 150ms, color 150ms; } .ds-tab:hover { border-bottom-color: #E5E5E5; color: hsl(var(--foreground)); } .ds-tab-current, .ds-tab-current:hover { border-bottom-color: hsl(var(--lime)); color: hsl(var(--label)); font-weight: 600; } .ds-tab-issue { color: hsl(var(--status-danger-fg)); } .ds-tab:focus-visible { outline: none; box-shadow: inset 0 0 0 2px hsl(var(--ring)); } .ds-circle { display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; box-sizing: border-box; border-radius: 9999px; border: 2px solid #D4D4D4; background: hsl(var(--card)); color: #737373; font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; } .ds-circle-current { border: none; background: hsl(var(--primary)); color: #fff; } .ds-circle-done { border-color: hsl(var(--status-success-fg)); color: hsl(var(--status-success-fg)); } .ds-circle-issue { border-color: hsl(var(--status-danger-fg)); background: hsl(var(--status-danger-bg)); color: hsl(var(--status-danger-fg)); }"
+    },
+    {
+      "name": "Module Rail",
+      "kind": "nav",
+      "refersTo": "rail-row-selected",
+      "description": "\"‹ My requests\" link, progress block and vertical stepper with bare glyphs; the viewed row is a white raised row.",
+      "html": "<aside class=\"ds-rail\"><a class=\"ds-back\" href=\"#\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m15 18-6-6 6-6\"/></svg>My requests</a><h2 class=\"ds-req-title\">Onboarding 2026</h2><div class=\"ds-prog-row\"><span class=\"ds-prog-label\">Progress</span><span class=\"ds-prog-pct\">42%</span></div><div class=\"ds-prog-track\" role=\"progressbar\" aria-valuenow=\"42\" aria-valuemin=\"0\" aria-valuemax=\"100\"><div class=\"ds-prog-fill\" style=\"width:42%\"></div></div><p class=\"ds-prog-note\">3 items left in Information</p><ol class=\"ds-steps\"><li class=\"ds-step\"><span class=\"ds-line ds-line-done\"></span><span class=\"ds-row\"><span class=\"ds-rc ds-rc-done\" aria-hidden=\"true\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M20 6 9 17l-5-5\"/></svg></span><span class=\"ds-glyph\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z\"/></svg></span><span class=\"ds-mname\">Background check</span></span></li><li class=\"ds-step\"><span class=\"ds-line\"></span><span class=\"ds-row ds-row-viewed\"><span class=\"ds-rc ds-rc-open\" aria-hidden=\"true\">2</span><span class=\"ds-glyph\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"8\" r=\"5\"/><path d=\"M20 21a8 8 0 0 0-16 0\"/></svg></span><span class=\"ds-mname\">Information</span><span class=\"ds-meta\">4/6</span></span></li><li class=\"ds-step\"><span class=\"ds-row\"><span class=\"ds-rc\" aria-hidden=\"true\">3</span><span class=\"ds-glyph ds-glyph-locked\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z\"/><path d=\"M14 2v4a2 2 0 0 0 2 2h4\"/></svg></span><span class=\"ds-mname ds-mname-locked\">E-sign</span><span class=\"ds-lock\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect x=\"3\" y=\"11\" width=\"18\" height=\"11\" rx=\"2\"/><path d=\"M7 11V7a5 5 0 0 1 10 0v4\"/></svg></span></span></li></ol></aside>",
+      "css": ".ds-rail { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Geist Variable', system-ui, 'Segoe UI', sans-serif; letter-spacing: -0.003em; width: 260px; padding: 32px 0 32px 12px; background: hsl(var(--background)); } .ds-back { display: inline-flex; align-items: center; gap: 2px; height: 36px; margin-left: -4px; padding: 0 4px; border-radius: 16px; color: hsl(var(--primary)); font-size: 15px; text-decoration: none; transition: opacity 150ms; } .ds-back:hover { opacity: .7; } .ds-back:focus-visible { outline: none; box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ring)); } .ds-req-title { margin: 20px 0 24px; font-size: 22px; line-height: 28px; font-weight: 600; letter-spacing: -0.02em; color: hsl(var(--label)); } .ds-prog-row { display: flex; align-items: flex-end; justify-content: space-between; } .ds-prog-label { font-size: 14px; color: hsl(var(--muted-foreground)); } .ds-prog-pct { font-size: 28px; line-height: 1; font-weight: 600; letter-spacing: -0.02em; color: hsl(var(--label)); font-variant-numeric: tabular-nums; } .ds-prog-track { margin-top: 10px; height: 8px; border-radius: 9999px; background: #E5E5E5; overflow: hidden; } .ds-prog-fill { height: 100%; border-radius: 9999px; background: hsl(var(--lime)); transition: width 500ms ease-out; } .ds-prog-note { margin: 10px 0 20px; font-size: 13px; color: hsl(var(--muted-foreground)); } .ds-steps { list-style: none; margin: 0; padding: 0; } .ds-step { position: relative; } .ds-line { position: absolute; left: 13px; top: 30px; width: 2px; height: calc(100% - 16px); background: #D4D4D4; } .ds-line-done { background: hsl(var(--status-success-fg)); } .ds-row { display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 8px 0; border-radius: 12px; } .ds-row-viewed { margin: 0 -8px; padding: 8px; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.05); } .ds-rc { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; flex-shrink: 0; box-sizing: border-box; border-radius: 9999px; border: 2px solid #D4D4D4; background: #fff; color: #737373; font-size: 13px; font-weight: 600; } .ds-rc-open { border: none; background: hsl(var(--primary)); color: #fff; } .ds-rc-done { border: none; background: hsl(var(--status-success-fg)); color: #fff; box-shadow: 0 0 0 3px hsl(var(--status-success-bg)); } .ds-glyph { display: flex; width: 28px; justify-content: center; color: hsl(var(--primary)); } .ds-glyph-locked { color: #737373; } .ds-mname { flex: 1; min-width: 0; font-size: 14px; line-height: 20px; font-weight: 600; color: hsl(var(--label)); } .ds-mname-locked { font-weight: 500; color: #525252; } .ds-meta { font-size: 13px; font-weight: 600; color: hsl(var(--status-success-fg)); font-variant-numeric: tabular-nums; } .ds-lock { display: flex; color: #737373; }"
+    },
+    {
+      "name": "Step Panel with Sections",
+      "kind": "card",
+      "refersTo": "step-panel",
+      "description": "Soft white panel (16px, panel shadow, no border): module header, then hairline-divided sections; the second section shows an issue count.",
+      "html": "<div class=\"ds-panel\"><div class=\"ds-phead\"><span class=\"ds-pglyph\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"8\" r=\"5\"/><path d=\"M20 21a8 8 0 0 0-16 0\"/></svg></span><div><span class=\"ds-pcount\">Module 1 of 5</span><span class=\"ds-pname\">Information</span></div></div><div class=\"ds-pbody\"><section class=\"ds-sec\"><h2 class=\"ds-sec-title\">Legal name</h2><p class=\"ds-sec-desc\">As it appears on your government ID.</p></section><section class=\"ds-sec\"><div class=\"ds-sec-head\"><h2 class=\"ds-sec-title\">Current address</h2><span class=\"ds-count\"><svg width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M12 8v4M12 16h.01\"/></svg>1 item needs attention</span></div><p class=\"ds-sec-desc\">Where you live now.</p></section></div></div>",
+      "css": ".ds-panel { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Geist Variable', system-ui, 'Segoe UI', sans-serif; letter-spacing: -0.003em; max-width: 640px; border-radius: 16px; background: hsl(var(--card)); box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 6px 24px rgba(0,0,0,0.05); } .ds-phead { display: flex; align-items: center; gap: 16px; padding: 16px 32px; border-bottom: 1px solid hsl(var(--border)); } .ds-pglyph { display: flex; width: 32px; height: 40px; align-items: center; justify-content: center; color: hsl(var(--primary)); } .ds-pcount { display: block; font-size: 13px; color: hsl(var(--muted-foreground)); font-variant-numeric: tabular-nums; } .ds-pname { display: block; font-size: 20px; line-height: 28px; font-weight: 600; letter-spacing: -0.02em; color: hsl(var(--foreground)); } .ds-pbody { display: grid; gap: 32px; padding: 24px 32px 40px; } .ds-sec + .ds-sec { border-top: 1px solid hsl(var(--border)); padding-top: 32px; } .ds-sec-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; } .ds-sec-title { margin: 0; font-size: 17px; font-weight: 600; letter-spacing: -0.01em; color: hsl(var(--label)); } .ds-sec-desc { margin: 4px 0 0; font-size: 13px; color: hsl(var(--muted-foreground)); } .ds-count { display: inline-flex; align-items: center; gap: 4px; height: 20px; padding: 0 8px; border: 1px solid hsl(var(--status-danger-fg) / .2); border-radius: 9999px; background: hsl(var(--status-danger-bg)); color: hsl(var(--status-danger-fg)); font-size: 12px; font-weight: 500; }"
+    },
+    {
+      "name": "Upload Tiles",
+      "kind": "custom",
+      "refersTo": "item-tile",
+      "description": "Soft filled item tiles: an accepted-pending upload and a rejected upload with red tint, inset ring and reason strip.",
+      "html": "<div class=\"ds-tiles\"><div class=\"ds-tile\"><div class=\"ds-trow\"><span class=\"ds-tglyph\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z\"/><path d=\"M14 2v4a2 2 0 0 0 2 2h4\"/></svg></span><div class=\"ds-tmeta\"><div class=\"ds-tname\">photo-id.pdf</div><div class=\"ds-tsub\">1.2 MB · Uploaded Oct 28, 2026</div></div><span class=\"ds-badge2 ds-b-info\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M12 6v6l4 2\"/></svg>Uploaded</span><button class=\"ds-tbtn\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z\"/><circle cx=\"12\" cy=\"12\" r=\"3\"/></svg>View</button></div></div><div class=\"ds-tile ds-tile-rej\"><div class=\"ds-trow\"><span class=\"ds-tglyph ds-tglyph-rej\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z\"/><path d=\"M14 2v4a2 2 0 0 0 2 2h4\"/></svg></span><div class=\"ds-tmeta\"><div class=\"ds-tname\">proof-of-address.jpg</div><div class=\"ds-tsub\">640 KB · Uploaded Oct 20, 2026</div></div><span class=\"ds-badge2 ds-b-danger\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M12 8v4M12 16h.01\"/></svg>Rejected</span></div><div class=\"ds-tstrip\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M12 8v4M12 16h.01\"/></svg><span><strong>Rejected by HR:</strong> The document is older than 90 days.</span></div></div></div>",
+      "css": ".ds-tiles { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Geist Variable', system-ui, 'Segoe UI', sans-serif; letter-spacing: -0.003em; display: grid; gap: 12px; max-width: 560px; } .ds-tile { overflow: hidden; border-radius: 12px; background: hsl(var(--field)); } .ds-tile-rej { background: hsl(var(--status-danger-bg) / .6); box-shadow: inset 0 0 0 1px hsl(var(--status-danger-fg) / .3); } .ds-trow { display: flex; align-items: center; gap: 12px; padding: 12px 16px; } .ds-tglyph { display: flex; color: hsl(var(--primary)); } .ds-tglyph-rej { color: hsl(var(--status-danger-fg)); } .ds-tmeta { flex: 1; min-width: 0; } .ds-tname { font-size: 14px; font-weight: 500; color: hsl(var(--foreground)); } .ds-tsub { font-size: 13px; color: hsl(var(--muted-foreground)); font-variant-numeric: tabular-nums; } .ds-badge2 { display: inline-flex; align-items: center; gap: 4px; height: 24px; padding: 0 8px; border: 1px solid; border-radius: 9999px; font-size: 12px; font-weight: 500; } .ds-b-info { background: hsl(var(--status-info-bg)); color: hsl(var(--status-info-fg)); border-color: hsl(var(--status-info-fg) / .2); } .ds-b-danger { background: hsl(var(--status-danger-bg)); color: hsl(var(--status-danger-fg)); border-color: hsl(var(--status-danger-fg) / .2); } .ds-tbtn { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border: none; border-radius: 10px; background: transparent; color: hsl(var(--foreground)); font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; } .ds-tbtn:hover { background: hsl(var(--muted)); } .ds-tbtn:focus-visible { outline: none; box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ring)); } .ds-tstrip { display: flex; gap: 8px; align-items: flex-start; padding: 10px 16px; border-top: 1px solid hsl(var(--status-danger-fg) / .2); background: hsl(var(--status-danger-bg)); color: hsl(var(--status-danger-fg)); font-size: 13px; } .ds-tstrip svg { margin-top: 2px; flex-shrink: 0; } .ds-tstrip strong { font-weight: 500; }"
+    },
+    {
+      "name": "Approved Banner",
+      "kind": "custom",
+      "refersTo": "status-badge",
+      "description": "Module banner above the step title; the approved variant is the only home of Request changes.",
+      "html": "<div class=\"ds-banner\" role=\"status\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"m9 12 2 2 4-4\"/></svg><div class=\"ds-banner-body\"><div><p class=\"ds-banner-title\">Approved on Oct 21, 2026</p><p class=\"ds-banner-text\">This module is locked. What you submitted is shown read-only.</p></div><button class=\"ds-banner-action\">Request changes</button></div></div>",
+      "css": ".ds-banner { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Geist Variable', system-ui, 'Segoe UI', sans-serif; letter-spacing: -0.003em; display: flex; gap: 12px; padding: 12px 16px; border: 1px solid hsl(var(--status-success-fg) / .2); border-radius: 16px; background: hsl(var(--status-success-bg)); color: hsl(var(--status-success-fg)); } .ds-banner > svg { margin-top: 2px; flex-shrink: 0; } .ds-banner-body { display: flex; flex: 1; align-items: flex-start; justify-content: space-between; gap: 24px; } .ds-banner-title { margin: 0; font-size: 14px; font-weight: 600; } .ds-banner-text { margin: 2px 0 0; font-size: 14px; color: #404040; } .ds-banner-action { border: none; background: none; padding: 0; color: inherit; font: inherit; font-size: 14px; font-weight: 500; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; border-radius: 8px; } .ds-banner-action:hover { text-decoration: none; } .ds-banner-action:focus-visible { outline: none; box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ring)); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Quiet Form",
+    "overview": "A light, grouped interface in the manner of Apple's own settings and forms. Nothing is dark: a translucent white header floats over a grouped grey page (#F2F2F7), and the work sits on soft white panels with generous 16px corners and a faint shadow instead of a border. Inside, fields are filled rather than outlined, sections are separated by hairlines rather than boxed, and items such as uploads, signatures and summaries sit on soft grey tiles. The system font (SF Pro on Apple devices, Geist as a fallback) carries the whole hierarchy in near-black.\n\nThere is one accent, a clinical teal, and it means \"act here\" or \"you are here\": primary buttons, links, the focused field's edge and halo, the current step, the current tab underline, progress. Approval is a true green. Problems are red and burnt orange, and \"in review\" is a soft indigo. There are no per-module colours; modules are told apart by icon and name. Status is always icon + label + colour.\n\nDensity stays comfortable: 15px input text in 44px fields, 13px medium labels, 32px between sections, and one sticky footer that always holds the next action at bottom right. Motion is short and state-led: steps rise into place, checks pop, notes fade in, and all of it stops under reduced motion.",
+    "keyCharacteristics": [
+      "No dark surfaces: a translucent white header with a hairline, a grouped grey page, white panels.",
+      "Soft panels: 16px corners and a faint two-layer shadow, no border.",
+      "Filled inputs: tertiary grey fill at rest, white with a teal edge and 4px teal halo on focus, a red tint when invalid.",
+      "Hairline-divided sections, never boxed; items sit on soft 12px grey tiles.",
+      "One teal accent; approval green; red and orange for problems; soft indigo for review.",
+      "System font in near-black, with labels at 13px medium.",
+      "Red is earned: it appears only for issues the provider has already walked past, or for HR rejections."
+    ],
+    "rules": [
+      {
+        "name": "The Earned Red Rule",
+        "body": "Red marks a step only after the provider opened it and moved on with required fields empty, or when HR rejected the module or an item. Untouched required work is neutral (\"N to complete\", grey circle), never red.",
+        "section": "colors"
+      },
+      {
+        "name": "The Pending Is Work Rule",
+        "body": "A document waiting for signature is neutral work (\"Ready to sign\" in teal), not a problem. It turns red only when the document is rejected or voided.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Accent Rule",
+        "body": "Teal is the only accent and means act here or you are here. There is no per-module colour; a module is identified by its icon and name. Green, red, orange and indigo are status-only.",
+        "section": "colors"
+      },
+      {
+        "name": "The Approved Is Green Rule",
+        "body": "Approval uses the true green, never the teal, so \"done\" never reads as \"current\".",
+        "section": "colors"
+      },
+      {
+        "name": "The No Dark Surfaces Rule",
+        "body": "No dark bands, dark headers or coloured rules across the page. Depth and grouping come from the grey ground, white panels and hairlines.",
+        "section": "colors"
+      },
+      {
+        "name": "The 12px Floor Rule",
+        "body": "No text renders below 12px. The `2xs` step (12/16) is the smallest size in the scale.",
+        "section": "typography"
+      },
+      {
+        "name": "The Counted Figures Rule",
+        "body": "Dates, sizes, counts and percentages use tabular numerals.",
+        "section": "typography"
+      },
+      {
+        "name": "The Quiet Label Rule",
+        "body": "Labels are near-black 13px medium, not coloured and not uppercase.",
+        "section": "typography"
+      },
+      {
+        "name": "The Bottom-Right Rule",
+        "body": "The primary action always sits at the bottom right of the step panel in the sticky footer. Back sits at the left; the attention jump sits in the centre.",
+        "section": "layout"
+      },
+      {
+        "name": "The Tabs Name It Rule",
+        "body": "When sub-step tabs are showing on desktop, the step title is visually hidden (kept for screen readers and phones) because the current tab already names the step.",
+        "section": "layout"
+      },
+      {
+        "name": "The Summary Only Rule",
+        "body": "A completed (read-only) module shows only its last step, a summary titled \"What you submitted\". Earlier step links redirect there, and no tabs show.",
+        "section": "layout"
+      },
+      {
+        "name": "The Hairline Not Box Rule",
+        "body": "Sections inside a step are divided by a hairline and 32px of space, never wrapped in bordered cards.",
+        "section": "layout"
+      },
+      {
+        "name": "The Translucent Chrome Rule",
+        "body": "Sticky bars (the header, the phone module bar) are white at 80 to 85% with a strong backdrop blur and a 6% black hairline, never a solid colour.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do keep every surface light: grouped grey ground, white panels, translucent white chrome.",
+      "Do use filled fields with the teal focus edge and halo; never outline fields at rest.",
+      "Do divide sections with hairlines and space; put items on soft 12px Field Fill tiles.",
+      "Do pair every status with an icon and a text label as well as its colour.",
+      "Do keep red for issues the provider has walked past and for HR rejections only (The Earned Red Rule).",
+      "Do show a completed module as its single \"What you submitted\" summary step.",
+      "Do keep the primary action at bottom right in the sticky footer.",
+      "Do use tabular numerals for every date, size, count and percentage."
+    ],
+    "donts": [
+      "Don't set any text below 12px.",
+      "Don't add dark bands, dark headers or coloured rules across the page.",
+      "Don't box sections in bordered cards inside the step panel.",
+      "Don't colour a pending signature or untouched required work red; it is neutral work.",
+      "Don't give modules their own colours or put icons on tinted tiles.",
+      "Don't use the teal to mean approved; approval is the true green.",
+      "Don't set text in Progress Teal; use Clinical Teal for teal text.",
+      "Don't offer \"Request changes\" anywhere but the approved banner.",
+      "Don't copy the reference portal's logo, name or wording."
+    ]
+  }
+}

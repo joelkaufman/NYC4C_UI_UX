@@ -1,0 +1,202 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Apple-style light system: grouped grey ground, white surfaces, near-black text */
+    --background: 192 22% 95.5%; /* grouped background with a whisper of teal */
+    --foreground: 240 6% 10%; /* #1C1C1E label */
+    --card: 0 0% 100%;
+    --card-foreground: 240 6% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 6% 10%;
+    --muted: 240 11% 95%;
+    --muted-foreground: 240 2% 43%; /* #6C6C70 secondary label */
+    --placeholder: 240 2% 40%; /* AA on white, the field fill, and its hover */
+    --border: 240 6% 89%; /* hairline separator */
+    --input: 240 5% 82%;
+    --secondary: 240 11% 95%;
+    --secondary-foreground: 240 6% 10%;
+    --accent: 240 11% 95%;
+    --accent-foreground: 240 6% 10%;
+
+    /* One accent: clinical teal */
+    --brand: 0 0% 100%;
+    --brand-deep: 240 6% 10%;
+    --primary: 190 82% 30%; /* #0E7189 actions, links, selection */
+    --primary-hover: 190 84% 25%;
+    --primary-subtle: 190 60% 94%;
+    --primary-foreground: 0 0% 100%;
+    --label: 240 6% 10%; /* labels stay near-black, Apple style */
+    --ring: 190 82% 30%;
+    --lime: 190 70% 40%; /* progress and current tab (name kept for compatibility) */
+    --lime-ink: 190 70% 28%;
+    --lime-wash: 190 60% 95%;
+
+    --destructive: 0 75% 45%;
+    --destructive-foreground: 0 0% 100%;
+
+    --status-success-fg: 140 60% 28%; /* #1D7339 */
+    --status-success-bg: 135 45% 94%;
+    --status-warning-fg: 25 85% 37%;
+    --status-warning-bg: 32 90% 95%;
+    --status-danger-fg: 0 75% 42%;
+    --status-danger-bg: 0 85% 97%;
+    --status-info-fg: 232 40% 42%;
+    --status-info-bg: 232 50% 96%;
+    --status-neutral-fg: 240 2% 40%;
+    --status-neutral-bg: 240 8% 94%;
+
+    --field: 190 55% 96%; /* teal-tinted fill */
+    --field-hover: 190 55% 94%;
+    --field-edge: 190 42% 84%; /* teal hairline edge */
+    --field-edge-hover: 190 50% 66%;
+
+    --radius: 10px;
+    --radius-lg: 16px;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    /* Keep focused and scrolled-to fields clear of the sticky header rows and footer. */
+    scroll-padding-top: 96px;
+    scroll-padding-bottom: 88px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scrollbar-color: hsl(215 20% 75%) transparent;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans text-sm;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Geist Variable', system-ui, 'Segoe UI', sans-serif;
+    letter-spacing: -0.003em;
+    caret-color: hsl(var(--primary));
+  }
+
+  ::selection {
+    background: hsl(var(--primary-subtle));
+    color: hsl(var(--foreground));
+  }
+
+  ::placeholder,
+  input::placeholder,
+  textarea::placeholder {
+    color: hsl(var(--placeholder));
+    opacity: 1;
+  }
+
+  a {
+    text-underline-offset: 3px;
+  }
+
+  @media (max-width: 1023px) {
+    html {
+      scroll-padding-top: 168px;
+    }
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  input[type='date'] {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Reduced motion: keep state changes instant */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer utilities {
+  .focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+}
+
+@keyframes upload {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(300%); }
+}
+
+/* Motion: subtle, state-led. Content starts mostly visible so nothing waits on animation. */
+@keyframes step-enter {
+  from { opacity: 0.35; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes check-pop {
+  0% { transform: scale(0.6); opacity: 0.3; }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes note-in {
+  from { opacity: 0; transform: translateY(-3px); }
+  to { opacity: 1; transform: none; }
+}
+@layer utilities {
+  .motion-step-enter { animation: step-enter 240ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+  .motion-check-pop { animation: check-pop 280ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+  .motion-note-in { animation: note-in 180ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .motion-step-enter,
+  .motion-check-pop,
+  .motion-note-in {
+    animation: none;
+  }
+}
+
+/* Step body measure: content centred at 880px inside the panel; borders still span the full width. */
+@layer utilities {
+  @media (min-width: 1024px) {
+    .step-measure {
+      padding-left: max(2rem, calc((100% - 880px) / 2)) !important;
+      padding-right: max(2rem, calc((100% - 880px) / 2)) !important;
+    }
+  }
+}
+
+/* Filled fields: no resting border; white with a teal edge and soft halo on focus. */
+@layer components {
+  .field-control {
+    background-color: hsl(var(--field));
+    border: 1px solid hsl(var(--field-edge));
+    border-radius: 10px;
+    transition: background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+  }
+  .field-control:hover:not(:disabled) {
+    background-color: hsl(var(--field-hover));
+    border-color: hsl(var(--field-edge-hover));
+  }
+  .field-control:focus-visible,
+  .field-control[data-state='open'] {
+    outline: none;
+    caret-color: hsl(var(--primary));
+    background-color: hsl(var(--card));
+    border-color: hsl(var(--primary));
+    box-shadow: 0 0 0 4px hsl(var(--primary) / 0.14);
+  }
+  .field-control[aria-invalid='true'] {
+    background-color: hsl(var(--status-danger-bg));
+    border-color: hsl(var(--status-danger-fg) / 0.55);
+  }
+  .field-control[aria-invalid='true']:focus-visible {
+    background-color: hsl(var(--card));
+    border-color: hsl(var(--status-danger-fg));
+    box-shadow: 0 0 0 4px hsl(var(--status-danger-fg) / 0.14);
+  }
+  .field-control:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
