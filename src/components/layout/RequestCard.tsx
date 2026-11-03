@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { moduleStatusSpec, StatusBadge, type StatusSpec } from '@/components/shared/status';
 import { AlertCircle, CheckCircle2, CircleDot, Clock } from 'lucide-react';
 import { formatDate } from '@/lib/format';
+import { AnimatedNumber } from '@/components/shared/AnimatedNumber';
 import { cn } from '@/lib/utils';
 import { ModuleTile } from '@/components/shared/ModuleTile';
 
@@ -60,7 +61,7 @@ export function RequestCard({ request }: { request: ProviderRequest }) {
               )}
             </span>
             <span className="shrink-0 whitespace-nowrap text-muted-foreground tabular">
-              {approved} of {total} approved
+              <AnimatedNumber value={approved} /> of {total} approved
             </span>
           </div>
           <div className="h-1.5 overflow-hidden rounded-full bg-neutral-200" role="progressbar" aria-valuenow={Math.round((approved / total) * 100)} aria-valuemin={0} aria-valuemax={100} aria-label="Modules approved">

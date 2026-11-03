@@ -57,7 +57,7 @@ export function StepShell({
           </div>
         ) : null}
       </header>
-      <div className="step-measure motion-step-enter grid flex-1 content-start gap-8 px-4 pb-10 pt-6 sm:px-6 [&>*]:min-w-0">{children}</div>
+      <div className="step-measure motion-step-enter grid flex-1 content-start gap-6 px-4 pb-8 pt-5 sm:px-6 [&>*]:min-w-0">{children}</div>
       {footer}
     </div>
   );

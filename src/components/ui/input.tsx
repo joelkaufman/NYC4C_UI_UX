@@ -8,7 +8,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({ className, type,
     <input
       type={type}
       className={cn(
-        'field-control flex h-11 w-full px-3.5 py-1 text-[15px] text-foreground file:border-0 file:bg-transparent file:text-sm file:font-medium',
+        'field-control flex h-9 w-full px-3 py-1 text-sm text-foreground file:border-0 file:bg-transparent file:text-sm file:font-medium',
         className,
       )}
       aria-invalid={invalid || undefined}

@@ -14,7 +14,7 @@ const SelectTrigger = React.forwardRef<
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
-      'field-control group flex h-11 w-full items-center justify-between px-3.5 py-2 text-[15px] [&>span]:line-clamp-1 data-[placeholder]:text-[hsl(var(--placeholder))]',
+      'field-control group flex h-9 w-full items-center justify-between px-3 py-1.5 text-sm [&>span]:line-clamp-1 data-[placeholder]:text-[hsl(var(--placeholder))]',
       className,
     )}
     aria-invalid={invalid || undefined}
@@ -66,7 +66,7 @@ const SelectItem = React.forwardRef<
   <SelectPrimitive.Item
     ref={ref}
     className={cn(
-      'relative flex w-full cursor-default select-none items-center rounded-lg py-2 pl-8 pr-2 text-[15px] outline-none focus:bg-muted data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+      'relative flex w-full cursor-default select-none items-center rounded-lg py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-muted data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
       className,
     )}
     {...props}

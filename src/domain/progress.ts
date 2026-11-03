@@ -1,7 +1,7 @@
 import type { ModuleDef, ModuleInstance, ModuleValidation, ProviderRequest, StepDef, StepIssue } from './types';
 import { getModuleDef } from './registry';
 import { currentModule, isEditable } from './lifecycle';
-import { allIssues } from './validation';
+import { allIssues, isBlank } from './validation';
 
 export type StepState = 'complete' | 'issues' | 'untouched';
 
@@ -89,4 +89,48 @@ export function moduleLandingStep(request: ProviderRequest, instance: ModuleInst
   const v = def.validate(instance, request);
   const first = def.steps.find((s) => s.kind !== 'preview' && (v.stepIssues[s.id]?.length ?? 0) > 0);
   return first ? first.id : def.steps[0].id;
+}
+
+/**
+ * Required items on one step: what is still missing, plus every filled value, upload or signature
+ * whose removal would make it missing. Steps only report what is missing, so the filled side is probed.
+ */
+export function stepProgress(step: StepDef, instance: ModuleInstance, request: ProviderRequest): { done: number; total: number } {
+  if (!step.issues) return { done: 0, total: 0 };
+  const check = step.issues;
+  const data = instance.data[step.id];
+  const missing = check(data, instance, request);
+  const flagsMissing = (d: unknown, inst: ModuleInstance, target: string) => check(d, inst, request).some((i) => i.targetId === target);
+
+  let done = 0;
+  for (const path of filledPaths(data)) {
+    if (flagsMissing(withoutPath(data, path), instance, path.join('.'))) done += 1;
+  }
+  for (const [id, item] of Object.entries(instance.uploads)) {
+    if (item.status === 'missing' || item.status === 'rejected') continue;
+    const uploads = { ...instance.uploads };
+    delete uploads[id];
+    if (flagsMissing(data, { ...instance, uploads }, id)) done += 1;
+  }
+  for (const [id, item] of Object.entries(instance.esigns)) {
+    if (item.status !== 'signed') continue;
+    const esigns = { ...instance.esigns };
+    delete esigns[id];
+    if (flagsMissing(data, { ...instance, esigns }, id)) done += 1;
+  }
+  return { done, total: done + missing.length };
+}
+
+function filledPaths(value: unknown, prefix: (string | number)[] = []): (string | number)[][] {
+  if (Array.isArray(value)) return value.flatMap((v, i) => filledPaths(v, [...prefix, i]));
+  if (value && typeof value === 'object') return Object.entries(value).flatMap(([k, v]) => filledPaths(v, [...prefix, k]));
+  return prefix.length && !isBlank(value) ? [prefix] : [];
+}
+
+function withoutPath(value: unknown, path: (string | number)[]): unknown {
+  if (!path.length) return undefined;
+  const [head, ...rest] = path;
+  if (Array.isArray(value)) return value.map((v, i) => (i === head ? withoutPath(v, rest) : v));
+  const obj = (value ?? {}) as Record<string, unknown>;
+  return { ...obj, [head]: withoutPath(obj[head], rest) };
 }

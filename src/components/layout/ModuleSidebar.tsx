@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Check, ChevronLeft, Lock } from 'lucide-react';
-import { useCountUp } from '@/hooks/use-count-up';
+import { AnimatedNumber } from '@/components/shared/AnimatedNumber';
 import type { ModuleModel } from '@/domain/progress';
 import { stepHref } from '@/domain/progress';
 import { toneText } from '@/components/shared/status';
@@ -108,7 +108,6 @@ export function ModuleList({
 /** Left rail: back link, request name, overall progress, then the module stepper. */
 export function ModuleSidebar(props: Parameters<typeof ModuleList>[0] & { requestTitle: string; createdAt: string }) {
   const { pct, remaining } = requestProgress(props.models);
-  const shownPct = useCountUp(pct);
   const current = props.models.find((m) => m.instance.status === 'open' || m.instance.status === 'rejected');
   return (
     <aside aria-label="Request progress" className="sticky top-14 hidden h-[calc(100dvh-56px)] -ml-3 w-[272px] shrink-0 overflow-y-auto py-8 pl-3 pr-1 lg:block xl:w-[292px]">
@@ -126,8 +125,8 @@ export function ModuleSidebar(props: Parameters<typeof ModuleList>[0] & { reques
       <div className="mt-6">
         <div className="flex items-end justify-between">
           <span className="text-sm text-muted-foreground">Progress</span>
-          <span className="text-[34px] font-bold leading-none tracking-[-0.03em] text-[hsl(var(--progress-ink))] tabular" aria-label={`${pct}%`}>
-            {shownPct}%
+          <span className="text-[34px] font-bold leading-none tracking-[-0.03em] text-[hsl(var(--progress-ink))] tabular">
+            <AnimatedNumber value={pct} />%
           </span>
         </div>
         <div className="mt-2.5 h-2.5 overflow-hidden rounded-full bg-[hsl(var(--lime)/0.15)]" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-label="Overall progress">
@@ -135,7 +134,7 @@ export function ModuleSidebar(props: Parameters<typeof ModuleList>[0] & { reques
         </div>
         <p className="mt-2.5 text-[13px] text-muted-foreground">
           {remaining && current
-            ? `${remaining} ${remaining === 1 ? 'item' : 'items'} left in ${current.def.title}`
+            ? <><AnimatedNumber value={remaining} /> {remaining === 1 ? 'item' : 'items'} left in {current.def.title}</>
             : pct === 100
               ? 'Every module is complete'
               : 'Waiting on HR'}

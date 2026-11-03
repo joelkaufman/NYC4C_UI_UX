@@ -19,6 +19,7 @@ export function StepFooter({
   attentionTone = 'danger',
   onAttention,
   note,
+  progress,
 }: {
   onBack?(): void;
   primary?: FooterPrimary;
@@ -27,10 +28,27 @@ export function StepFooter({
   attentionTone?: 'danger' | 'neutral';
   onAttention?(): void;
   note?: React.ReactNode;
+  /** Required items done on the current step. Drawn as a hairline along the top edge. */
+  progress?: { done: number; total: number };
 }) {
   if (!onBack && !primary && !attention && !note) return null;
   return (
     <div className="sticky bottom-0 z-10 border-t bg-card lg:rounded-b-2xl shadow-[0_-1px_3px_0_rgb(15_23_42/0.06)]">
+      {progress && progress.total > 0 ? (
+        <div
+          className="absolute inset-x-0 -top-px h-[3px] bg-[hsl(var(--lime)/0.15)]"
+          role="progressbar"
+          aria-valuenow={progress.done}
+          aria-valuemin={0}
+          aria-valuemax={progress.total}
+          aria-label={`${progress.done} of ${progress.total} required items on this step complete`}
+        >
+          <div
+            className="h-full rounded-r-full bg-[hsl(var(--lime))] transition-[width] duration-500 ease-out"
+            style={{ width: `${(progress.done / progress.total) * 100}%` }}
+          />
+        </div>
+      ) : null}
       <div className="step-measure flex h-16 w-full items-center gap-2 px-4 sm:px-6">
         <div className="flex-1">
           {onBack ? (

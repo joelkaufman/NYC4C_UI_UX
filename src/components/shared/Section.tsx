@@ -37,7 +37,7 @@ export function Section({
     <section
       aria-labelledby={id}
       className={cn(
-        'border-t pt-8 first:border-t-0 first:pt-0',
+        'border-t pt-6 first:border-t-0 first:pt-0',
         className,
       )}
     >
@@ -59,7 +59,7 @@ export function Section({
         {aside}
         {helper ? <HelperButton helper={helper} /> : null}
       </header>
-      <div className={cn('mt-5 grid gap-4 [&>*]:min-w-0', readOnly && 'gap-y-5')}>{children}</div>
+      <div className={cn('mt-4 grid gap-3 [&>*]:min-w-0', readOnly && 'gap-y-4')}>{children}</div>
     </section>
   );
 }

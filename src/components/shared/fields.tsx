@@ -72,7 +72,7 @@ function FieldFrame({
   labelAsGroup,
 }: CommonProps & { id: string; error?: string; children: React.ReactNode; labelAsGroup?: boolean }) {
   return (
-    <div className={cn('group/field grid min-w-0 content-start gap-1.5', className)} data-field={id}>
+    <div className={cn('group/field grid min-w-0 content-start gap-1', className)} data-field={id}>
       <FieldLabel htmlFor={labelAsGroup ? undefined : id} id={`${id}-label`} label={label} required={required} helper={helper} />
       {children}
       <FieldError id={`${id}-error`} message={error} />
@@ -108,7 +108,7 @@ export function ReadOnlyField({ label, value, className, issue }: { label: strin
 
 export function FieldRow({ cols = 2, className, children }: { cols?: 2 | 3; className?: string; children: React.ReactNode }) {
   return (
-    <div className={cn('grid gap-4', cols === 2 ? 'sm:grid-cols-2' : 'sm:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)]', className)}>
+    <div className={cn('grid gap-3', cols === 2 ? 'sm:grid-cols-2' : 'sm:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)]', className)}>
       {children}
     </div>
   );
@@ -127,8 +127,8 @@ function useDone(id: string, required: boolean | undefined, value: unknown, erro
 function DoneMark({ show }: { show: boolean }) {
   if (!show) return null;
   return (
-    <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-status-success-fg">
-      <CheckCircle2 className="motion-check-pop h-[18px] w-[18px]" aria-hidden />
+    <span className="pointer-events-none absolute inset-y-0 right-2.5 flex items-center text-status-success-fg">
+      <CheckCircle2 className="motion-check-pop h-4 w-4" aria-hidden />
       <span className="sr-only">Complete</span>
     </span>
   );
@@ -151,7 +151,7 @@ export function TextField({ id, value, onChange, onBlur, error, readOnly, hidden
     <FieldFrame id={id} label={label} required={required} help={help} error={error} helper={helper} className={className}>
       <div className="relative">
       <Input
-        className={done ? 'pr-10' : undefined}
+        className={done ? 'pr-9' : undefined}
         id={id}
         type={type}
         value={value ?? ''}
@@ -199,7 +199,7 @@ export function DateField({ id, value, onChange, onBlur, error, readOnly, hidden
     <FieldFrame id={id} label={label} required={required} help={help} error={error} helper={helper} className={className}>
       <div className="relative">
       <Input
-        className={done ? 'pr-10' : undefined}
+        className={done ? 'pr-9' : undefined}
         id={id}
         type="date"
         value={value ?? ''}
@@ -262,7 +262,7 @@ export function RadioGroupField({ id, value, onChange, onBlur, error, readOnly, 
         aria-describedby={describedBy(id, help, error)}
         orientation={inline ? 'horizontal' : 'vertical'}
         className={cn(
-          'inline-flex max-w-full flex-wrap gap-1 justify-self-start rounded-[10px] bg-[hsl(var(--field))] p-1 ring-1 ring-inset ring-[hsl(var(--field-edge))]',
+          'inline-flex max-w-full flex-wrap gap-1 justify-self-start rounded-[8px] bg-[hsl(var(--field))] p-0.5 ring-1 ring-inset ring-[hsl(var(--field-edge))]',
           error && 'ring-1 ring-inset ring-status-danger-fg/50',
           !inline && 'flex-col',
         )}
@@ -272,7 +272,7 @@ export function RadioGroupField({ id, value, onChange, onBlur, error, readOnly, 
             key={o.value}
             id={i === 0 ? id : `${id}-${o.value}`}
             value={o.value}
-            className="h-9 min-w-16 rounded-[8px] px-4 text-sm font-medium text-neutral-600 transition-[background-color,color,box-shadow] duration-150 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring data-[state=checked]:bg-primary data-[state=checked]:font-semibold data-[state=checked]:text-primary-foreground data-[state=checked]:shadow-[0_1px_2px_rgba(14,118,139,0.25)]"
+            className="h-8 min-w-14 rounded-[6px] px-3 text-sm font-medium text-neutral-600 transition-[background-color,color,box-shadow] duration-150 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring data-[state=checked]:bg-primary data-[state=checked]:font-semibold data-[state=checked]:text-primary-foreground data-[state=checked]:shadow-[0_1px_2px_rgba(14,118,139,0.25)]"
           >
             {o.label}
           </RadioGroupPrimitive.Item>

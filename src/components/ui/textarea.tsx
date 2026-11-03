@@ -6,7 +6,7 @@ export type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement> & 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(({ className, invalid, ...props }, ref) => (
   <textarea
     className={cn(
-      'field-control flex min-h-[88px] w-full px-3.5 py-2.5 text-[15px]',
+      'field-control flex min-h-[72px] w-full px-3 py-2 text-sm',
       className,
     )}
     aria-invalid={invalid || undefined}

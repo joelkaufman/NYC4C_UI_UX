@@ -3,12 +3,13 @@ import { Link, Navigate, useNavigate, useParams, useSearchParams } from 'react-r
 import { ArrowLeft } from 'lucide-react';
 import type { ModuleId } from '@/domain/types';
 import { currentModuleId, isEditable } from '@/domain/lifecycle';
-import { buildModuleModel, landingTarget, moduleLandingStep, stepHref } from '@/domain/progress';
+import { buildModuleModel, landingTarget, moduleLandingStep, stepHref, stepProgress } from '@/domain/progress';
 import { useRequest, useStore, visitKey } from '@/mock/store';
 import { api } from '@/mock/api';
 import { toast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
 import { StepShell } from '@/components/shared/StepShell';
+import { AnimatedNumber } from '@/components/shared/AnimatedNumber';
 import { ModuleBanner } from '@/components/shared/ModuleBanner';
 import { StepIssuesProvider } from '@/components/shared/step-context';
 import { RequestChangesDialog } from '@/components/shared/RequestChangesDialog';
@@ -256,7 +257,7 @@ export function ProcessPage() {
                 <span className="shrink-0 text-sm font-medium text-foreground">{def.title}</span>
                 <ProgressBar value={model.total ? model.done / model.total : 0} tone={model.flagged ? 'danger' : 'primary'} className="h-1 flex-1" />
                 <span className="shrink-0 text-xs text-muted-foreground tabular">
-                  {model.done} of {model.total} sections complete
+                  <AnimatedNumber value={model.done} /> of {model.total} sections complete
                 </span>
               </div>
             ) : model.steps.length > 1 ? (
@@ -330,7 +331,7 @@ export function ProcessPage() {
                 </div>
               </div>
               {model.steps.length > 1 && editable ? (
-                <div className="hidden border-b px-3 lg:block lg:px-5">
+                <div className="sticky top-14 z-10 hidden border-b bg-card px-3 lg:block lg:px-5">
                   <StepPath steps={model.steps} currentStepId={step.id} onSelect={(sid) => go(sid)} label={`Steps in ${def.title}`} />
                 </div>
               ) : null}
@@ -363,6 +364,7 @@ export function ProcessPage() {
                   attention={attention}
                   attentionTone={model.flagged ? 'danger' : 'neutral'}
                   onAttention={onAttention}
+                  progress={editable && step.kind !== 'preview' ? stepProgress(step, instance, request) : undefined}
                   note={
                     editable && model.validation.isComplete && previewStep && step.id !== previewStep.id ? (
                       <button
