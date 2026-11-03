@@ -1,6 +1,7 @@
 import { Link, useMatch } from 'react-router-dom';
 import { Settings2 } from 'lucide-react';
-import { PRODUCT_NAME, PRODUCT_SUBTITLE } from '@/config';
+import { COMPANY_NAME, PRODUCT_SUBTITLE } from '@/config';
+import logo from '@/assets/logo.png';
 import { useStore } from '@/mock/store';
 import { formatDateTime, initials } from '@/lib/format';
 import { Sheet, SheetBody, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
@@ -9,7 +10,7 @@ import * as React from 'react';
 // The dev admin panel is rarely opened; load it on demand.
 const AdminPanel = React.lazy(() => import('@/admin/AdminPanel').then((m) => ({ default: m.AdminPanel })));
 
-/** Navy band with a lime rule: wordmark left; save state, provider and dev panel right. */
+/** Frosted band: organisation logo left; save state, provider and dev panel right. */
 export function TopBar() {
   const provider = useStore((s) => s.provider);
   const lastSavedAt = useStore((s) => s.lastSavedAt);
@@ -18,14 +19,9 @@ export function TopBar() {
     <header className="sticky top-0 z-30 h-14 border-b border-black/[0.06] bg-white/80 text-foreground backdrop-blur-xl backdrop-saturate-150">
       <div className="mx-auto flex h-full w-full max-w-[1480px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8 xl:px-12">
         <Link to="/" className="flex min-w-0 items-center gap-3 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary text-sm font-semibold tracking-[-0.02em] text-white" aria-hidden>
-            {PRODUCT_NAME.split(' ').map((w) => w[0]).join('').slice(0, 2)}
-          </span>
-          
-          <span className="min-w-0 leading-tight">
-            <span className="block truncate text-[15px] font-semibold tracking-[-0.01em]">{PRODUCT_NAME}</span>
-            <span className="hidden truncate text-xs text-muted-foreground sm:block">{PRODUCT_SUBTITLE}</span>
-          </span>
+          <img src={logo} alt={COMPANY_NAME} width={719} height={160} className="h-9 w-auto shrink-0" />
+          <span className="hidden h-6 border-l sm:block" aria-hidden />
+          <span className="hidden truncate text-sm font-medium text-muted-foreground sm:block">{PRODUCT_SUBTITLE}</span>
         </Link>
         <div className="flex items-center gap-3 sm:gap-4">
           {match && lastSavedAt ? (

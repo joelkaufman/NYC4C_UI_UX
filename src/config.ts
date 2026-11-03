@@ -1,11 +1,7 @@
-/**
- * Placeholders for identity that has not been decided yet.
- * Replace these two constants when the organisation and product names are known.
- */
-export const PRODUCT_NAME = 'Provider Portal';
-export const COMPANY_NAME = 'the Agency';
-/** Second line of the header wordmark. Placeholder until the organisation is named. */
-export const PRODUCT_SUBTITLE = 'Onboarding';
+/** Organisation and product identity. The header logo lives in src/assets/logo.png. */
+export const COMPANY_NAME = 'New York Counseling for Change';
+/** Shown beside the header logo. */
+export const PRODUCT_SUBTITLE = 'Provider onboarding';
 
 /** Address history look-back the Information module must cover, in years. */
 export const ADDRESS_LOOKBACK_YEARS = 5;
