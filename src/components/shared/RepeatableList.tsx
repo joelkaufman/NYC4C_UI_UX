@@ -124,7 +124,7 @@ export function RepeatableList<T extends { id: string }>({
             key={item.id}
             className={cn(
               'overflow-hidden rounded-xl ring-1 ring-inset transition-shadow',
-              isEditing ? 'bg-card shadow-[0_2px_10px_rgba(16,40,48,0.08)] ring-[hsl(var(--primary)/0.35)]' : 'bg-[hsl(var(--field))] ring-[hsl(var(--field-edge))]',
+              isEditing ? 'bg-card shadow-[0_2px_10px_rgba(16,40,24,0.08)] ring-[hsl(var(--primary)/0.35)]' : 'bg-[hsl(var(--field))] ring-[hsl(var(--field-edge))]',
               count > 0 && !isEditing && 'ring-status-danger-fg/40',
             )}
           >

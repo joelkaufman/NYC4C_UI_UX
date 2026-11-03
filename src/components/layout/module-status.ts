@@ -60,8 +60,8 @@ export function moduleTone(model: ModuleModel): Tone {
 }
 
 
-/** One shared clinical teal for every module: the system uses a single colour family, not per-module hues. */
-const MODULE_GREEN = { fg: '#0E768B', bg: '#E6F3F6', wash: '#F3F9FA', ink: '#0B4F60' };
+/** One shared brand green for every module: the system uses a single colour family, not per-module hues. */
+const MODULE_GREEN = { fg: '#03682F', bg: '#E9F5E5', wash: '#F4FAF1', ink: '#005223' };
 export const MODULE_HUES: Record<ModuleId, { fg: string; bg: string; wash: string; ink: string }> = {
   information: MODULE_GREEN,
   background_check: MODULE_GREEN,

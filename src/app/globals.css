@@ -5,7 +5,7 @@
 @layer base {
   :root {
     /* Apple-style light system: grouped grey ground, white surfaces, near-black text */
-    --background: 192 22% 95.5%; /* grouped background with a whisper of teal */
+    --background: 100 14% 95.5%; /* grouped background with a whisper of leaf green */
     --foreground: 240 6% 10%; /* #1C1C1E label */
     --card: 0 0% 100%;
     --card-foreground: 240 6% 10%;
@@ -21,30 +21,30 @@
     --accent: 240 11% 95%;
     --accent-foreground: 240 6% 10%;
 
-    /* One accent: clinical teal */
+    /* Brand greens from the logo: forest for actions, leaf for progress */
     --brand: 0 0% 100%;
     --brand-deep: 240 6% 10%;
-    --primary: 190 82% 30%; /* #0E7189 actions, links, selection */
-    --primary-hover: 190 84% 25%;
-    --primary-subtle: 190 60% 94%;
+    --primary: 146 95% 21%; /* #03682F logo forest: actions, links, selection */
+    --primary-hover: 146 100% 16%;
+    --primary-subtle: 105 45% 93%;
     --primary-foreground: 0 0% 100%;
     --label: 240 6% 10%; /* labels stay near-black, Apple style */
-    --ring: 190 82% 30%;
-    --lime: 190 70% 40%; /* progress fill: bars and current tab (name kept for compatibility) */
+    --ring: 146 95% 21%;
+    --lime: 99 51% 50%; /* #6CC13E logo leaf: progress fill and current tab */
 
     /* Accent roles: a palette can recolour these without touching actions or status. */
-    --highlight: 190 82% 30%; /* module tile, "Module N of 5", avatar, in-progress chip */
-    --highlight-soft: 190 60% 94%;
-    --progress-ink: 190 82% 30%; /* the big progress figure */
-    --help: 190 82% 30%; /* help links */
-    --lime-ink: 190 70% 28%;
-    --lime-wash: 190 60% 95%;
+    --highlight: 146 95% 21%; /* module tile, "Module N of 5", avatar, in-progress chip */
+    --highlight-soft: 105 45% 93%;
+    --progress-ink: 146 95% 21%; /* the big progress figure */
+    --help: 146 95% 21%; /* help links */
+    --lime-ink: 100 60% 27%;
+    --lime-wash: 95 50% 94%;
 
     --destructive: 0 75% 45%;
     --destructive-foreground: 0 0% 100%;
 
-    --status-success-fg: 140 60% 28%; /* #1D7339 */
-    --status-success-bg: 135 45% 94%;
+    --status-success-fg: 165 80% 25%; /* #0D7359 emerald, kept apart from the forest accent */
+    --status-success-bg: 160 45% 94%;
     --status-warning-fg: 25 85% 37%;
     --status-warning-bg: 32 90% 95%;
     --status-danger-fg: 0 75% 42%;
@@ -54,10 +54,10 @@
     --status-neutral-fg: 240 2% 40%;
     --status-neutral-bg: 240 8% 94%;
 
-    --field: 190 55% 96%; /* teal-tinted fill */
-    --field-hover: 190 55% 94%;
-    --field-edge: 190 42% 84%; /* teal hairline edge */
-    --field-edge-hover: 190 50% 66%;
+    --field: 100 30% 96.5%; /* green-tinted fill */
+    --field-hover: 100 30% 94%;
+    --field-edge: 105 22% 84%; /* green hairline edge */
+    --field-edge-hover: 120 28% 62%;
 
     --radius: 10px;
     --radius-lg: 16px;
@@ -183,7 +183,7 @@
   }
 }
 
-/* Filled fields: no resting border; white with a teal edge and soft halo on focus. */
+/* Filled fields: no resting border; white with a green edge and soft halo on focus. */
 @layer components {
   .field-control {
     background-color: hsl(var(--field));

@@ -272,7 +272,7 @@ export function RadioGroupField({ id, value, onChange, onBlur, error, readOnly, 
             key={o.value}
             id={i === 0 ? id : `${id}-${o.value}`}
             value={o.value}
-            className="h-8 min-w-14 rounded-[6px] px-3 text-sm font-medium text-neutral-600 transition-[background-color,color,box-shadow] duration-150 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring data-[state=checked]:bg-primary data-[state=checked]:font-semibold data-[state=checked]:text-primary-foreground data-[state=checked]:shadow-[0_1px_2px_rgba(14,118,139,0.25)]"
+            className="h-8 min-w-14 rounded-[6px] px-3 text-sm font-medium text-neutral-600 transition-[background-color,color,box-shadow] duration-150 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring data-[state=checked]:bg-primary data-[state=checked]:font-semibold data-[state=checked]:text-primary-foreground data-[state=checked]:shadow-[0_1px_2px_hsl(var(--primary)/0.25)]"
           >
             {o.label}
           </RadioGroupPrimitive.Item>
