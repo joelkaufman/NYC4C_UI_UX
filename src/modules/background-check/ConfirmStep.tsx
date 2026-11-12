@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { CheckCircle2, Clock } from 'lucide-react';
 import type { BackgroundConfirmData } from '@/domain/data';
 import type { ModuleInstance, PreviewSection, ProviderRequest, StepProps } from '@/domain/types';
-import { getPersonal, householdHelpers, stepData } from '@/domain/conditions';
+import { getPersonal, householdAdults, stepData } from '@/domain/conditions';
 import { isBlank, issuesFromSchema, requireKeys, stepSchema } from '@/domain/validation';
 import { Section } from '@/components/shared/Section';
 import { StepForm, useBind } from '@/components/shared/step-context';
@@ -11,10 +11,13 @@ import { CheckboxField, RadioGroupField, ReadOnlyField, TextareaField, TextField
 import { AddressTimeline } from '@/components/shared/AddressTimeline';
 import { COMPANY_NAME } from '@/config';
 import type { AddressesData } from '@/domain/data';
-import { formatDate, maskSSN } from '@/lib/format';
+import { maskSSN } from '@/lib/format';
+import { useStore } from '@/mock/store';
+import { toTimeline } from '@/modules/information/address-history';
+import { memberName } from '@/modules/information/HouseholdStep';
 
 export function buildSchema(request: ProviderRequest) {
-  const helpers = householdHelpers(request);
+  const helpers = householdAdults(request);
   return stepSchema<BackgroundConfirmData>((d, ctx) => {
     requireKeys(ctx, d, { livedOutsideState: 'Answer whether you lived outside the state in the last 5 years' });
     if (d.livedOutsideState === 'yes') requireKeys(ctx, d, { states: 'List the states you lived in' });
@@ -23,7 +26,7 @@ export function buildSchema(request: ProviderRequest) {
     }
     for (const h of helpers) {
       if (isBlank(d.helperConsents?.[h.id])) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['helperConsents', h.id], message: `Confirm consent for ${h.name || 'household helper'}` });
+        ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['helperConsents', h.id], message: `Confirm consent for ${memberName(h) || 'household member'}` });
       }
     }
   });
@@ -35,7 +38,7 @@ export function issues(data: unknown, _instance: ModuleInstance, request: Provid
 
 export function previewSections(data: unknown, request: ProviderRequest): PreviewSection[] {
   const d = (data ?? {}) as Partial<BackgroundConfirmData>;
-  const helpers = householdHelpers(request);
+  const helpers = householdAdults(request);
   return [
     {
       title: 'Background check answers',
@@ -43,7 +46,7 @@ export function previewSections(data: unknown, request: ProviderRequest): Previe
         { label: 'Other names in the last 7 years', value: d.otherNames },
         { label: 'Lived outside the state in the last 5 years', value: d.livedOutsideState === 'yes' ? `Yes: ${d.states}` : d.livedOutsideState === 'no' ? 'No' : '' },
         { label: 'Authorization', value: d.authorize ? 'Given' : '' },
-        ...helpers.map((h) => ({ label: `Consent for ${h.name}`, value: d.helperConsents?.[h.id] ? 'Given' : '' })),
+        ...helpers.map((h) => ({ label: `Consent for ${memberName(h)}`, value: d.helperConsents?.[h.id] ? 'Given' : '' })),
       ],
     },
   ];
@@ -52,8 +55,9 @@ export function previewSections(data: unknown, request: ProviderRequest): Previe
 /** Read-only summary pulled from Information, in the preview styling. */
 function Summary({ request }: { request: ProviderRequest }) {
   const p = getPersonal(request);
-  const addresses = (stepData<AddressesData>(request, 'information', 'addresses').addresses ?? []).filter(Boolean);
-  const helpers = householdHelpers(request);
+  const provider = useStore((s) => s.provider);
+  const addresses = toTimeline(stepData<AddressesData>(request, 'information', 'addresses'));
+  const helpers = householdAdults(request);
   return (
     <section className="border-b pb-8">
       <div className="flex flex-wrap items-center justify-between gap-2">
@@ -61,8 +65,8 @@ function Summary({ request }: { request: ProviderRequest }) {
         <span className="text-xs text-muted-foreground">To change these, request changes to Information.</span>
       </div>
       <div className="mt-4 grid gap-x-6 gap-y-4 sm:grid-cols-3">
-        <ReadOnlyField label="Full legal name" value={[p.firstName, p.middleName, p.lastName].filter(Boolean).join(' ')} />
-        <ReadOnlyField label="Date of birth" value={formatDate(p.dob)} />
+        <ReadOnlyField label="Name" value={provider.name} />
+        <ReadOnlyField label="Maiden or alias names" value={p.usedAlias === 'yes' ? p.aliasNames : p.usedAlias === 'no' ? 'None' : ''} />
         <ReadOnlyField label="Social Security number" value={maskSSN(p.ssn)} />
       </div>
       <div className="mt-6">
@@ -70,12 +74,12 @@ function Summary({ request }: { request: ProviderRequest }) {
         <AddressTimeline addresses={addresses} />
       </div>
       <div className="mt-2">
-        <div className="mb-1 text-xs text-muted-foreground">Household members who help with care</div>
+        <div className="mb-1 text-xs text-muted-foreground">Household members aged 18 or older</div>
         {helpers.length ? (
           <ul className="grid gap-1 text-sm text-foreground">
             {helpers.map((h) => (
               <li key={h.id}>
-                {h.name} <span className="text-muted-foreground">· {h.relationship}</span>
+                {memberName(h)} <span className="text-muted-foreground">· {h.relationship}</span>
               </li>
             ))}
           </ul>
@@ -91,7 +95,7 @@ function Fields({ request }: { request: ProviderRequest }) {
   const bind = useBind();
   const { watch } = useFormContext<BackgroundConfirmData>();
   const outside = watch('livedOutsideState');
-  const helpers = householdHelpers(request);
+  const helpers = householdAdults(request);
   return (
     <>
       <Section title="Your answers" fields={['otherNames', 'livedOutsideState', 'states']}>
@@ -105,7 +109,7 @@ function Fields({ request }: { request: ProviderRequest }) {
           <CheckboxField
             key={h.id}
             {...bind<boolean>(`helperConsents.${h.id}`)}
-            label={`${h.name} (${h.relationship}) authorizes ${COMPANY_NAME} to perform a background check`}
+            label={`${memberName(h)} (${h.relationship}) authorizes ${COMPANY_NAME} to perform a background check`}
             required
             help="Confirm you have their permission. They may be contacted to verify."
           />

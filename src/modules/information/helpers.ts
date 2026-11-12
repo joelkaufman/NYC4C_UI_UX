@@ -7,10 +7,10 @@ export const legalNameHelper: HelperDef = {
   content: {
     paragraphs: [
       'Your legal name is the name printed on your government ID and Social Security card. The background check and payroll both match against it, so it must be exact.',
-      'If the two documents show different names, use the one on your Social Security card and tell us about the other under "known by another name".',
+      'If the two documents show different names, use the one on your Social Security card and list the other as a maiden or alias name.',
     ],
     bullets: [
-      'Include your full middle name if it appears on your ID.',
+      'Include your full middle name if it appears on your ID. Enter NMN if you have none.',
       'Use hyphens and spaces exactly as printed.',
       'Do not use nicknames or initials unless they are your legal name.',
     ],
@@ -26,7 +26,11 @@ export const addressHelper: HelperDef = {
       'State rules for home care providers require a background check in every county you have lived in during the last five years. Your address history tells the screening company where to search.',
       'Gaps longer than 30 days can delay your background check. If you were travelling, staying with family or between homes, add the address you used for mail during that time.',
     ],
-    bullets: ['Start with your current address.', 'Add each previous address with the month you moved in and out.', 'Mailing addresses only need to be added if they differ from where you lived.'],
+    bullets: [
+      'Start with your current address and the date you started living there.',
+      'Add each previous address with the date you moved in. Its move-out date fills in from the address after it.',
+      'Keep adding addresses until Addresses validated shows Yes.',
+    ],
   },
 };
 
@@ -35,8 +39,8 @@ export const householdHelper: HelperDef = {
   title: 'Who counts as a household member?',
   content: {
     paragraphs: [
-      'List everyone who lives with you, and anyone who regularly helps you provide care, even if they live elsewhere.',
-      'Anyone who helps with care needs their own background check consent in the next module.',
+      'List everyone who lives with you, including children.',
+      'Household members aged 18 or older need their own background check consent in the next module.',
     ],
   },
 };

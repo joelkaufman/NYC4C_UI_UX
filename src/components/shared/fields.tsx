@@ -287,6 +287,66 @@ export const YES_NO: Option[] = [
   { value: 'no', label: 'No' },
 ];
 
+/** Multi-select picklist: a wrap of toggle chips, each one pressed when chosen. */
+export function MultiSelectField({
+  id,
+  value,
+  onChange,
+  onBlur,
+  error,
+  readOnly,
+  hidden,
+  label,
+  required,
+  help,
+  helper,
+  className,
+  options,
+}: BindProps<string[] | undefined> & CommonProps & { options: Option[] }) {
+  if (hidden) return null;
+  const chosen = value ?? [];
+  if (readOnly) {
+    const labels = options.filter((o) => chosen.includes(o.value)).map((o) => o.label);
+    return <ReadOnlyField label={label} value={labels.join(', ')} className={className} />;
+  }
+  const toggle = (v: string) => {
+    onChange(chosen.includes(v) ? chosen.filter((c) => c !== v) : [...chosen, v]);
+    onBlur();
+  };
+  return (
+    <FieldFrame id={id} label={label} required={required} help={help} error={error} helper={helper} className={className} labelAsGroup>
+      <div
+        role="group"
+        aria-labelledby={`${id}-label`}
+        aria-describedby={describedBy(id, help, error)}
+        className={cn('flex flex-wrap gap-1.5', error && 'rounded-[8px] ring-1 ring-status-danger-fg/50 ring-offset-2')}
+      >
+        {options.map((o, i) => {
+          const on = chosen.includes(o.value);
+          return (
+            <button
+              key={o.value}
+              id={i === 0 ? id : `${id}-${o.value}`}
+              type="button"
+              aria-pressed={on}
+              onClick={() => toggle(o.value)}
+              className={cn(
+                'inline-flex h-8 items-center rounded-full px-3 text-sm font-medium ring-1 ring-inset transition-[background-color,color,box-shadow] duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                on
+                  ? 'bg-primary font-semibold text-primary-foreground ring-primary'
+                  : 'bg-[hsl(var(--field))] text-neutral-600 ring-[hsl(var(--field-edge))] hover:text-primary',
+              )}
+            >
+              {on ? <CheckCircle2 className="-ml-0.5 mr-1.5 h-3.5 w-3.5" aria-hidden /> : null}
+              {o.label}
+            </button>
+          );
+        })}
+      </div>
+    </FieldFrame>
+  );
+}
+
 export function CheckboxField({
   id,
   value,

@@ -17,7 +17,7 @@ export const informationModule: ModuleDef = {
     {
       id: 'personal',
       title: 'Personal info',
-      description: 'Who you are and how to reach you.',
+      description: 'Your name and demographics.',
       kind: 'form',
       component: Personal.PersonalInfoStep,
       schema: Personal.schema,
@@ -39,7 +39,7 @@ export const informationModule: ModuleDef = {
     {
       id: 'household',
       title: 'Household',
-      description: 'Who lives with you or helps with care.',
+      description: 'Everyone who lives with you.',
       kind: 'form',
       component: Household.HouseholdStep,
       schema: Household.schema,

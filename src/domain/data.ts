@@ -2,31 +2,53 @@
 
 export type YesNo = 'yes' | 'no';
 
+/** Information › Personal info: the sheet's "Onboarding Information" and "Demographics" fields. */
 export interface PersonalData {
-  firstName: string;
-  middleName?: string;
-  lastName: string;
-  hasOtherName: YesNo | '';
-  previousName?: string;
-  dob: string;
+  middleName: string;
+  usedAlias: YesNo | '';
+  aliasNames?: string;
+  gender: 'male' | 'female' | '';
   ssn: string;
-  gender?: string;
-  email: string;
-  mobile: string;
-  homePhone?: string;
-  preferredContact: 'email' | 'mobile' | 'home' | '';
-  workAuth: 'citizen' | 'permanent_resident' | 'visa' | '';
-  visaType?: string;
-  visaExpiry?: string;
-  paymentMethod: 'direct_deposit' | 'check' | '';
-  emergencyName: string;
-  emergencyRelationship: string;
-  emergencyPhone: string;
+  stateOfBirth: string;
+  countryOfBirth: string;
+  countryOfCitizenship: string;
+  ethnicity: string;
+  race: string;
+  preferredLanguage: string;
+  languagesSpoken: string[];
+  /** Inches. */
+  height: string;
+  /** Pounds. */
+  weight: string;
+  eyeColor: string;
+  hairColor: string;
 }
 
+/** One previous address. Its move-out date is derived from the next newer address's move-in date. */
+export interface PreviousAddress {
+  id: string;
+  street: string;
+  city: string;
+  state: string;
+  zip: string;
+  moveIn: string;
+}
+
+/** Information › Addresses: current address plus the previous-addresses subform. */
+export interface AddressesData {
+  street: string;
+  apt?: string;
+  city: string;
+  state: string;
+  zip: string;
+  /** Date the provider started living at the current address. */
+  startDate: string;
+  previousAddresses: PreviousAddress[];
+}
+
+/** Dated address period, used to draw the address timeline. */
 export interface Address {
   id: string;
-  type: 'home' | 'mailing' | 'previous' | '';
   street: string;
   unit?: string;
   city: string;
@@ -37,22 +59,17 @@ export interface Address {
   current: boolean;
 }
 
-export interface AddressesData {
-  addresses: Address[];
-}
-
 export interface HouseholdMember {
   id: string;
-  name: string;
-  relationship: string;
+  firstName: string;
+  lastName: string;
+  gender: 'male' | 'female' | '';
   dob: string;
-  livesWithYou: boolean;
-  helpsWithCare?: boolean;
+  relationship: string;
 }
 
 export interface HouseholdData {
   members: HouseholdMember[];
-  livesAlone: boolean;
 }
 
 export interface License {

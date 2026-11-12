@@ -1,4 +1,5 @@
 import type { ModuleId, ProviderRequest } from './types';
+import { parseDate } from '@/lib/format';
 import type { EducationData, HouseholdData, HouseholdMember, PersonalData } from './data';
 
 /** Read a step's saved data from a request without throwing when it is absent. */
@@ -11,34 +12,24 @@ export const getPersonal = (request: ProviderRequest) => stepData<PersonalData>(
 export const getHousehold = (request: ProviderRequest) => stepData<HouseholdData>(request, 'information', 'household');
 export const getEducation = (request: ProviderRequest) => stepData<EducationData>(request, 'information', 'education');
 
-/** Information › Personal: "Have you been known by another name?" */
-export function hasOtherName(personal: Partial<PersonalData>): boolean {
-  return personal.hasOtherName === 'yes';
-}
-
-/** Information › Personal: visa holders must give visa type and expiry. */
-export function needsVisaFields(personal: Partial<PersonalData>): boolean {
-  return personal.workAuth === 'visa';
-}
-
-/** Information › Documents: permanent residents and visa holders upload a work authorization document. */
+/** Information › Documents: anyone who is not a U.S. citizen uploads a work authorization document. */
 export function requiresWorkAuthDocument(request: ProviderRequest): boolean {
-  const wa = getPersonal(request).workAuth;
-  return wa === 'permanent_resident' || wa === 'visa';
+  const country = getPersonal(request).countryOfCitizenship;
+  return !!country && country !== 'US';
 }
 
-/** Information › Household: members who help with care need a background check consent row. */
-export function householdHelpers(request: ProviderRequest): HouseholdMember[] {
-  return (getHousehold(request).members ?? []).filter((m) => m.helpsWithCare);
+/** Information › Household: members aged 18 or older need a background check consent row. */
+export function householdAdults(request: ProviderRequest, today = new Date()): HouseholdMember[] {
+  const cutoff = new Date(today);
+  cutoff.setFullYear(today.getFullYear() - 18);
+  return (getHousehold(request).members ?? []).filter((m) => {
+    const dob = parseDate(m?.dob);
+    return !!dob && dob <= cutoff;
+  });
 }
 
 /** Information › Education: licensed providers sign an attestation and upload their license. */
 export function isLicensedProvider(request: ProviderRequest): boolean {
   const level = getEducation(request).highestLevel;
   return level === 'nursing_degree' || level === 'other_licensed';
-}
-
-/** E-sign: direct deposit authorization only when paid by direct deposit. */
-export function usesDirectDeposit(request: ProviderRequest): boolean {
-  return getPersonal(request).paymentMethod === 'direct_deposit';
 }

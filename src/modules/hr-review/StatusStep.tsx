@@ -5,7 +5,7 @@ import { formatDate } from '@/lib/format';
 const CHECKLIST = [
   'Your identity matches your documents',
   'Your address history covers the last 5 years',
-  'Background check results for you and household helpers',
+  'Background check results for you and adult household members',
   'Signed employment agreement and acknowledgments',
   'Certificates and trainings are current',
   'License is active, for licensed providers',

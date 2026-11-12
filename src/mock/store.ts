@@ -247,7 +247,8 @@ export const useStore = create<StoreState>()(
     },
     {
       name: STORE_KEY,
-      version: 1,
+      // 2: Information fields replaced from the onboarding fields sheet; older saved data is dropped and reseeded.
+      version: 2,
       partialize: (s) => ({
         requests: s.requests.map((r) => ({
           ...r,

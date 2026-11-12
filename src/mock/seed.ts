@@ -62,67 +62,44 @@ export function emptyRequest(id: string, createdDaysAgo = 0): ProviderRequest {
 
 export function mariaPersonal(overrides: Partial<PersonalData> = {}): PersonalData {
   return {
-    firstName: 'Maria',
     middleName: 'Elena',
-    lastName: 'Gonzalez',
-    hasOtherName: 'yes',
-    previousName: 'Maria Elena Ruiz',
-    dob: '1988-04-17',
-    ssn: '412-55-7316',
+    usedAlias: 'yes',
+    aliasNames: 'Maria Elena Ruiz',
     gender: 'female',
-    email: 'maria.gonzalez@example.com',
-    mobile: '(555) 214-8830',
-    homePhone: '',
-    preferredContact: 'mobile',
-    workAuth: 'citizen',
-    visaType: '',
-    visaExpiry: '',
-    paymentMethod: 'direct_deposit',
-    emergencyName: 'Luis Gonzalez',
-    emergencyRelationship: 'Spouse',
-    emergencyPhone: '(555) 214-9902',
+    ssn: '412-55-7316',
+    stateOfBirth: 'CA',
+    countryOfBirth: 'US',
+    countryOfCitizenship: 'US',
+    ethnicity: 'hispanic',
+    race: 'white',
+    preferredLanguage: 'english',
+    languagesSpoken: ['english', 'spanish'],
+    height: '64',
+    weight: '138',
+    eyeColor: 'brown',
+    hairColor: 'black',
     ...overrides,
   };
 }
 
-/** Three addresses covering five years, with a ~2.5 month gap between the two older ones. */
+/** Current address plus one previous address, together covering more than five years. */
 export function mariaAddresses(): AddressesData {
   return {
-    addresses: [
-      {
-        id: 'addr_1',
-        type: 'home',
-        street: '2147 Alder Creek Road',
-        unit: 'Apt 3B',
-        city: 'Sacramento',
-        state: 'CA',
-        zip: '95822',
-        from: daysAgo(1310),
-        to: '',
-        current: true,
-      },
-      {
-        id: 'addr_2',
-        type: 'previous',
-        street: '88 Willow Bend Court',
-        unit: '',
-        city: 'Elk Grove',
-        state: 'CA',
-        zip: '95758',
-        from: daysAgo(2210),
-        to: daysAgo(1390),
-        current: false,
-      },
-    ],
+    street: '2147 Alder Creek Road',
+    apt: '3B',
+    city: 'Sacramento',
+    state: 'CA',
+    zip: '95822',
+    startDate: daysAgo(1310),
+    previousAddresses: [{ id: 'addr_2', street: '88 Willow Bend Court', city: 'Elk Grove', state: 'CA', zip: '95758', moveIn: daysAgo(2210) }],
   };
 }
 
 export function mariaHousehold(): HouseholdData {
   return {
-    livesAlone: false,
     members: [
-      { id: 'hh_1', name: 'Luis Gonzalez', relationship: 'Spouse', dob: '1985-09-02', livesWithYou: true, helpsWithCare: true },
-      { id: 'hh_2', name: 'Sofia Gonzalez', relationship: 'Daughter', dob: '2012-01-23', livesWithYou: true, helpsWithCare: false },
+      { id: 'hh_1', firstName: 'Luis', lastName: 'Gonzalez', gender: 'male', relationship: 'Spouse', dob: '1985-09-02' },
+      { id: 'hh_2', firstName: 'Sofia', lastName: 'Gonzalez', gender: 'female', relationship: 'Daughter', dob: '2012-01-23' },
     ],
   };
 }
@@ -229,7 +206,7 @@ function seedInProgress(): ProviderRequest {
 
 const EXPIRED_PROOF = 'Proof of address is expired, please upload a document from the last 90 days';
 
-/** 2. Needs attention: Information rejected, proof of address rejected, emergency phone missing. */
+/** 2. Needs attention: Information rejected, proof of address rejected, hair color missing. */
 function seedNeedsAttention(): ProviderRequest {
   const r = emptyRequest('req_needs_attention', 12);
   r.title = 'Onboarding – Live-in Caregiver';
@@ -237,7 +214,7 @@ function seedNeedsAttention(): ProviderRequest {
     ...r.modules[0],
     status: 'rejected',
     rejectionMessage: EXPIRED_PROOF,
-    data: informationData('associate', { emergencyPhone: '' }),
+    data: informationData('associate', { hairColor: '' }),
     uploads: mariaInfoUploads(5, 'rejected', EXPIRED_PROOF),
   };
   return recomputeStatus(r);

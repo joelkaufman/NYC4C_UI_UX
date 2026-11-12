@@ -19,7 +19,7 @@ export const esignModule: ModuleDef = {
     },
   ],
   uploadSlots: () => [],
-  esignItems: (request) => Step.esignDefs(request),
+  esignItems: () => Step.esignDefs(),
   validate(instance, request) {
     return validateSteps(esignModule, instance, request);
   },
