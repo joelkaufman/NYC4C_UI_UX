@@ -6,12 +6,14 @@ import * as Addresses from './AddressesStep';
 import * as Household from './HouseholdStep';
 import * as Education from './EducationStep';
 import * as Documents from './DocumentsStep';
+import * as Sign from './SignStep';
+import { signDefs, signHelper } from './esign';
 import { addressHelper, documentsHelper, householdHelper, legalNameHelper } from './helpers';
 
 export const informationModule: ModuleDef = {
   id: 'information',
   title: 'Information',
-  description: 'Your personal details, address history, household, education and identity documents.',
+  description: 'Your personal details, address history, household, education, identity documents and employment documents to sign.',
   requiresReview: true,
   steps: [
     {
@@ -68,14 +70,23 @@ export const informationModule: ModuleDef = {
     },
     {
       id: 'preview',
-      title: 'Preview & confirm',
-      description: 'Check everything, then submit to HR.',
+      title: 'Review & submit',
+      description: 'Check everything, then submit your information.',
       kind: 'preview',
       component: PreviewConfirmStep,
     },
+    {
+      id: 'sign',
+      title: 'Sign documents',
+      description: 'Sign each required document, then send Information to HR.',
+      kind: 'esign',
+      component: Sign.SignStep,
+      helpers: [signHelper],
+      issues: Sign.issues,
+    },
   ],
   uploadSlots: (request) => Documents.documentSlots(request),
-  esignItems: () => [],
+  esignItems: () => signDefs(),
   validate(instance, request) {
     return validateSteps(informationModule, instance, request);
   },

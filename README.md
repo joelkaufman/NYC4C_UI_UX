@@ -37,13 +37,12 @@ Pressing Escape first dismisses the newest toast, then the panel.
 
 1. Open `/`. Three requests show with progress and status badges.
 2. Open **Onboarding – Live-in Caregiver**. It lands on Information › Personal info with the red rejection banner. The hair color field is highlighted, and the step path shows "!" on Personal info and Documents.
-3. Choose a hair color; the step's "!" turns into a check. Go to Documents, replace the rejected proof of address, open Preview & confirm, check that the issue list is gone, and click **Resubmit module**. Information is now in review, fields are read-only and Background check stays locked.
+3. Choose a hair color; the step's "!" turns into a check. Go to Documents, replace the rejected proof of address, open Review & submit, check that the issue list is gone, and click **Resubmit information**. The information locks and the app moves to the module's last step, Sign documents, where the documents go from Preparing to Ready to sign. **Sign now** signs one; in the admin panel set one to Rejected, then recover with **Request new document**. **Send to HR** enables only when every required document is signed (**Edit information** goes back to editing and replaces the documents). Information is now in review and shows one read-only page with everything done in the module, signed documents included; Background check stays locked.
 4. Open the admin panel and click **Approve review** on Information. Background check unlocks and the app moves there.
-5. Background check shows the summary from Information and one consent row per household member aged 18 or older. Answer, consent, and **Submit**. E-sign unlocks.
-6. E-sign items go from Preparing to Ready to sign. **Sign now** signs an item. In the admin panel set one item to Rejected, then recover with **Request new document**. **Finish** enables only when every required item is signed.
-7. Training: add a certificate without its upload and the entry shows an issue; add the upload and it clears. If Education's highest level is a nursing degree or other licensed profession, the Licensed Provider Attestation and License copy appear. Submit; Training goes to review. Approve it in the panel and HR review goes to review automatically.
-8. From an approved Information module, click **Request changes** (in the green banner or the sidebar), give a reason, then **Accept revert** in the panel. Information reopens, later modules lock again, and entered data is kept.
-9. Load the *HR rejected back to Training* scenario, or reject HR review in the panel and choose Training. Training reopens with HR's message.
+5. Background check shows the summary from Information and one consent row per household member aged 18 or older. Answer, consent, and **Submit**. Training unlocks.
+6. Training: add a certificate without its upload and the entry shows an issue; add the upload and it clears. If Education's highest level is a nursing degree or other licensed profession, the Licensed Provider Attestation and License copy appear. Submit; Training goes to review. Approve it in the panel and HR review goes to review automatically.
+7. From an approved Information module, click **Request changes** (in the green banner or the sidebar), give a reason, then **Accept revert** in the panel. Information reopens, later modules lock again, and entered data is kept.
+8. Load the *HR rejected back to Training* scenario, or reject HR review in the panel and choose Training. Training reopens with HR's message.
 10. Reload at any point; state persists. **Reset demo data** restores the seeds.
 
 ## Where things live

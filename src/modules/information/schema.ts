@@ -6,11 +6,20 @@ import { ADDRESS_LOOKBACK_YEARS } from '@/config';
 import { addressHistory } from './address-history';
 
 const digits = (v?: string) => (v ?? '').replace(/\D/g, '');
+const wholeBetween = (v: string | undefined, min: number, max: number) => /^\d+$/.test((v ?? '').trim()) && Number(v) >= min && Number(v) <= max;
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const positive = (v?: string) => /^\d+(\.\d+)?$/.test((v ?? '').trim()) && Number(v) > 0;
 
 export const personalSchema = stepSchema<PersonalData>((d, ctx) => {
   const add = (path: string, message: string) => ctx.addIssue({ code: z.ZodIssueCode.custom, path: [path], message });
   requireKeys(ctx, d, {
+    firstName: 'Enter your first name',
+    lastName: 'Enter your last name',
+    dob: 'Enter your date of birth',
+    email: 'Enter your email address',
+    primaryPhone: 'Enter your primary phone number',
+    alternatePhone: 'Enter an alternate phone number',
+    preferredContact: 'Choose how you prefer to be contacted',
     middleName: 'Enter your middle name, or NMN if you have none',
     usedAlias: 'Answer whether you have ever used a maiden or alias name',
     gender: 'Choose your gender',
@@ -21,15 +30,22 @@ export const personalSchema = stepSchema<PersonalData>((d, ctx) => {
     ethnicity: 'Choose your ethnicity',
     race: 'Choose your race',
     preferredLanguage: 'Choose your preferred language',
-    height: 'Enter your height in inches',
+    heightFeet: 'Enter the feet in your height',
+    heightInches: 'Enter the inches in your height, or 0',
     weight: 'Enter your weight in pounds',
     eyeColor: 'Choose your eye color',
     hairColor: 'Choose your hair color',
   });
   if (d.usedAlias === 'yes') requireKeys(ctx, d, { aliasNames: 'Enter every maiden or alias name you have used' });
   if (!(d.languagesSpoken ?? []).length) add('languagesSpoken', 'Choose every language you speak');
+  if (d.dob && d.dob > todayIso()) add('dob', 'Date of birth cannot be in the future');
+  if (!isBlank(d.email) && !EMAIL.test(d.email!.trim())) add('email', 'Enter a valid email address');
+  for (const key of ['primaryPhone', 'alternatePhone'] as const) {
+    if (!isBlank(d[key]) && digits(d[key]).length !== 10) add(key, 'Enter a 10-digit phone number');
+  }
   if (!isBlank(d.ssn) && digits(d.ssn).length !== 9) add('ssn', 'Enter all 9 digits of your Social Security number');
-  if (!isBlank(d.height) && !positive(d.height)) add('height', 'Enter your height as a number of inches');
+  if (!isBlank(d.heightFeet) && !wholeBetween(d.heightFeet, 1, 8)) add('heightFeet', 'Enter feet as a whole number from 1 to 8');
+  if (!isBlank(d.heightInches) && !wholeBetween(d.heightInches, 0, 11)) add('heightInches', 'Enter inches as a whole number from 0 to 11');
   if (!isBlank(d.weight) && !positive(d.weight)) add('weight', 'Enter your weight as a number of pounds');
 });
 

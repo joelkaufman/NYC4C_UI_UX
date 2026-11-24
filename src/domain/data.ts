@@ -4,7 +4,14 @@ export type YesNo = 'yes' | 'no';
 
 /** Information › Personal info: the sheet's "Onboarding Information" and "Demographics" fields. */
 export interface PersonalData {
+  firstName: string;
   middleName: string;
+  lastName: string;
+  dob: string;
+  email: string;
+  primaryPhone: string;
+  alternatePhone: string;
+  preferredContact: 'phone' | 'email' | '';
   usedAlias: YesNo | '';
   aliasNames?: string;
   gender: 'male' | 'female' | '';
@@ -16,8 +23,9 @@ export interface PersonalData {
   race: string;
   preferredLanguage: string;
   languagesSpoken: string[];
-  /** Inches. */
-  height: string;
+  /** Height is entered as whole feet plus the remaining inches (0–11). */
+  heightFeet: string;
+  heightInches: string;
   /** Pounds. */
   weight: string;
   eyeColor: string;
@@ -88,7 +96,15 @@ export interface EducationData {
   licenses: License[];
 }
 
+/** One date and time the provider can attend a fingerprint appointment (`YYYY-MM-DDTHH:mm`, local). */
+export interface FingerprintSlot {
+  id: string;
+  at: string;
+}
+
 export interface BackgroundConfirmData {
+  /** Fingerprint availability subform: one to three options. */
+  fingerprintAvailability: FingerprintSlot[];
   otherNames?: string;
   livedOutsideState: YesNo | '';
   states?: string;

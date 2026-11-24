@@ -1,6 +1,6 @@
 import { ADDRESS_LOOKBACK_YEARS } from '@/config';
 import type { Address, AddressesData, PreviousAddress } from '@/domain/data';
-import { formatMonthYear, parseDate } from '@/lib/format';
+import { parseDate } from '@/lib/format';
 
 const YEAR_MS = 365.25 * 86_400_000;
 const round1 = (n: number) => Math.round(n * 10) / 10;
@@ -22,7 +22,6 @@ export interface AddressHistory {
   priorYearsNeeded: number | null;
   priorYearsProvided: number;
   validated: boolean;
-  message: string;
 }
 
 /** The sheet's read-only address fields, derived from what the provider entered. */
@@ -34,7 +33,6 @@ export function addressHistory(d: Partial<AddressesData>, today = new Date()): A
       priorYearsNeeded: null,
       priorYearsProvided: 0,
       validated: false,
-      message: 'Enter the date you started living at your current address.',
     };
   }
   const yearsAtCurrent = Math.max(0, (today.getTime() - start.getTime()) / YEAR_MS);
@@ -44,17 +42,11 @@ export function addressHistory(d: Partial<AddressesData>, today = new Date()): A
   const provided = oldest ? (start.getTime() - oldest.getTime()) / YEAR_MS : 0;
   // Compare at display precision so 4.96 provided against 5.0 needed reads the same as it validates.
   const validated = round1(provided) >= round1(needed);
-  const lookbackStart = new Date(today);
-  lookbackStart.setFullYear(today.getFullYear() - ADDRESS_LOOKBACK_YEARS);
-  const missing = round1(needed - provided);
   return {
     yearsAtCurrent: round1(yearsAtCurrent),
     priorYearsNeeded: round1(needed),
     priorYearsProvided: round1(provided),
     validated,
-    message: validated
-      ? ''
-      : `Your address history is incomplete. Add previous addresses covering ${missing} more ${missing === 1 ? 'year' : 'years'}, back to ${formatMonthYear(lookbackStart.toISOString())}.`,
   };
 }
 

@@ -1,6 +1,6 @@
 import type { ModuleDef, ModuleInstance, ModuleValidation, ProviderRequest, StepDef, StepIssue } from './types';
 import { getModuleDef } from './registry';
-import { currentModule, isEditable } from './lifecycle';
+import { currentModule, isDataEditable, isEditable, isSigning } from './lifecycle';
 import { allIssues, isBlank } from './validation';
 
 export type StepState = 'complete' | 'issues' | 'untouched';
@@ -20,6 +20,8 @@ export interface ModuleModel {
   done: number;
   total: number;
   issueCount: number;
+  /** Issues that are something to fix; excludes documents simply waiting for a signature. */
+  problemCount: number;
   /** Editable module whose issues are showing at some level (visited, touched, rejected). */
   flagged: boolean;
 }
@@ -51,7 +53,9 @@ export function buildModuleModel(
       const flaggable = left || instance.status === 'rejected';
       const hasContent = left || stepHasContent(instance, def, step, request);
       if (step.kind === 'preview') {
-        state = validation.isComplete ? 'complete' : left ? 'issues' : 'untouched';
+        // Signatures still to collect are work to do, not problems.
+        const onlyPendingSignatures = allIssues(validation).every(({ issue }) => issue.kind === 'esign_pending');
+        state = validation.isComplete || instance.dataSubmittedAt ? 'complete' : left && !onlyPendingSignatures ? 'issues' : 'untouched';
       } else if (issues.length) {
         // Documents waiting for a signature are work to do, not problems; only a rejection flags them.
         const onlyPendingSignatures = issues.every((i) => i.kind === 'esign_pending');
@@ -64,8 +68,10 @@ export function buildModuleModel(
   });
 
   const done = steps.filter((s) => s.state === 'complete').length;
-  const flagged = editable && issueCount > 0 && (instance.status === 'rejected' || steps.some((s) => s.state === 'issues'));
-  return { def, instance, validation, steps, done, total: steps.length, issueCount, flagged };
+  // Documents still waiting for a signature are work to do, not something to fix.
+  const problemCount = allIssues(validation).filter(({ issue }) => issue.kind !== 'esign_pending').length;
+  const flagged = editable && problemCount > 0 && (instance.status === 'rejected' || steps.some((s) => s.state === 'issues'));
+  return { def, instance, validation, steps, done, total: steps.length, issueCount, problemCount, flagged };
 }
 
 /** Where opening a request should land: current module, first step with issues, else its first step. */
@@ -80,12 +86,22 @@ export function stepHref(requestId: string, moduleId: string, stepId?: string, f
 }
 
 /**
+ * The one step shown once a module's data is locked: its last step while documents are being signed,
+ * then its preview step (the summary of everything done in the module), or the last step if it has none.
+ */
+export function lockedStep(def: ModuleDef, instance: ModuleInstance): StepDef {
+  const last = def.steps[def.steps.length - 1];
+  if (isSigning(instance)) return last;
+  return def.steps.find((s) => s.kind === 'preview') ?? last;
+}
+
+/**
  * Editable module: its first step with issues, else its first step.
- * Completed (read-only) module: its last step, the summary of what was submitted.
+ * Submitted or completed (read-only) module: its locked step.
  */
 export function moduleLandingStep(request: ProviderRequest, instance: ModuleInstance): string {
   const def = getModuleDef(instance.id);
-  if (!isEditable(instance.status)) return def.steps[def.steps.length - 1].id;
+  if (!isDataEditable(instance)) return lockedStep(def, instance).id;
   const v = def.validate(instance, request);
   const first = def.steps.find((s) => s.kind !== 'preview' && (v.stepIssues[s.id]?.length ?? 0) > 0);
   return first ? first.id : def.steps[0].id;

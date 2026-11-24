@@ -1,6 +1,6 @@
 import type { ModuleId, ModuleInstance, ModuleStatus, ProviderRequest } from './types';
 
-export const MODULE_ORDER: ModuleId[] = ['information', 'background_check', 'esign', 'training', 'hr_review'];
+export const MODULE_ORDER: ModuleId[] = ['information', 'background_check', 'training', 'hr_review'];
 
 export function moduleIndex(id: ModuleId): number {
   return MODULE_ORDER.indexOf(id);
@@ -20,6 +20,16 @@ export function currentModuleId(request: ProviderRequest): ModuleId {
 
 export function isEditable(status: ModuleStatus): boolean {
   return status === 'open' || status === 'rejected';
+}
+
+/** Signing phase: the provider has submitted the module's data and is now signing its documents. */
+export function isSigning(m: ModuleInstance): boolean {
+  return isEditable(m.status) && !!m.dataSubmittedAt;
+}
+
+/** The module's fields, lists and uploads can still be changed. */
+export function isDataEditable(m: ModuleInstance): boolean {
+  return isEditable(m.status) && !m.dataSubmittedAt;
 }
 
 export function isReadOnly(status: ModuleStatus): boolean {
@@ -71,6 +81,16 @@ export function approveModule(request: ProviderRequest, id: ModuleId, now: strin
   return recomputeStatus(unlockNext(r, id, now));
 }
 
+/** Lock the module's data and start signing. Documents are prepared from the data, so earlier ones are dropped. */
+export function submitModuleData(request: ProviderRequest, id: ModuleId, now: string): ProviderRequest {
+  return recomputeStatus(withModule(request, id, (m) => ({ ...m, dataSubmittedAt: now, esigns: {} })));
+}
+
+/** Back from signing to editing. The documents are replaced when the data is submitted again. */
+export function reopenModuleData(request: ProviderRequest, id: ModuleId): ProviderRequest {
+  return withModule(request, id, (m) => ({ ...m, dataSubmittedAt: undefined }));
+}
+
 export function submitModule(request: ProviderRequest, id: ModuleId, now: string): ProviderRequest {
   const m = request.modules.find((x) => x.id === id);
   if (!m) return request;
@@ -83,7 +103,8 @@ export function submitModule(request: ProviderRequest, id: ModuleId, now: string
 }
 
 /**
- * Reopen a module and lock every later module again. Data, uploads and e-signs are kept.
+ * Reopen a module for editing and lock every later module again. Data, uploads and e-signs are kept
+ * (signed documents are replaced when the data is submitted again).
  */
 export function reopenModule(
   request: ProviderRequest,
@@ -106,6 +127,7 @@ export function reopenModule(
           revertDeclineNote: undefined,
           approvedAt: undefined,
           submittedAt: undefined,
+          dataSubmittedAt: undefined,
         };
       }
       return {
@@ -116,6 +138,7 @@ export function reopenModule(
         revertDeclineNote: undefined,
         approvedAt: undefined,
         submittedAt: undefined,
+        dataSubmittedAt: undefined,
       };
     }),
   });

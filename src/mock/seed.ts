@@ -1,4 +1,4 @@
-import type { ESignItem, ModuleId, ModuleInstance, Provider, ProviderRequest, UploadItem } from '@/domain/types';
+import type { ApplicationInfo, ESignItem, ModuleId, ModuleInstance, Provider, ProviderRequest, UploadItem } from '@/domain/types';
 import type {
   AddressesData,
   BackgroundConfirmData,
@@ -13,10 +13,12 @@ import { recomputeStatus } from '@/domain/lifecycle';
 /** Demo fixture only. Not a real person. */
 export const SEED_PROVIDER: Provider = { name: 'Maria Gonzalez', email: 'maria.gonzalez@example.com' };
 
+/** Placeholder values: the sheet lists Credentials, Channel and Division without their options. */
+export const SEED_APPLICATION: ApplicationInfo = { position: 'clinician', credentials: 'LMSW', channel: 'Employee referral', division: 'Outpatient Services' };
+
 const REVIEW: Record<ModuleId, boolean> = {
   information: true,
   background_check: false,
-  esign: false,
   training: true,
   hr_review: true,
 };
@@ -48,10 +50,10 @@ export function emptyRequest(id: string, createdDaysAgo = 0): ProviderRequest {
     processType: 'onboarding',
     createdAt: stamp(createdDaysAgo, 9),
     status: 'not_started',
+    application: SEED_APPLICATION,
     modules: [
       emptyModule('information', 'open'),
       emptyModule('background_check'),
-      emptyModule('esign'),
       emptyModule('training'),
       emptyModule('hr_review'),
     ],
@@ -62,7 +64,14 @@ export function emptyRequest(id: string, createdDaysAgo = 0): ProviderRequest {
 
 export function mariaPersonal(overrides: Partial<PersonalData> = {}): PersonalData {
   return {
+    firstName: 'Maria',
     middleName: 'Elena',
+    lastName: 'Gonzalez',
+    dob: '1988-04-17',
+    email: SEED_PROVIDER.email,
+    primaryPhone: '(916) 555-0142',
+    alternatePhone: '(916) 555-0178',
+    preferredContact: 'email',
     usedAlias: 'yes',
     aliasNames: 'Maria Elena Ruiz',
     gender: 'female',
@@ -74,7 +83,8 @@ export function mariaPersonal(overrides: Partial<PersonalData> = {}): PersonalDa
     race: 'white',
     preferredLanguage: 'english',
     languagesSpoken: ['english', 'spanish'],
-    height: '64',
+    heightFeet: '5',
+    heightInches: '4',
     weight: '138',
     eyeColor: 'brown',
     hairColor: 'black',
@@ -134,18 +144,25 @@ function signed(id: string, title: string, required: boolean, days: number): ESi
   return { id, title, required, status: 'signed', providerEnvelopeId: `env_seed_${id}`, signedAt: stamp(days, 11) };
 }
 
-export function mariaESigns(days: number, directDeposit = true): Record<string, ESignItem> {
+/** The Information documents, all signed. */
+export function mariaESigns(days: number): Record<string, ESignItem> {
   const items: ESignItem[] = [
     signed('employment_agreement', 'Employment Agreement', true, days),
     signed('confidentiality_hipaa', 'Confidentiality & HIPAA Acknowledgment', true, days),
+    signed('direct_deposit', 'Direct Deposit Authorization', true, days),
     signed('handbook_ack', 'Handbook Acknowledgment', false, days),
   ];
-  if (directDeposit) items.push(signed('direct_deposit', 'Direct Deposit Authorization', true, days));
   return Object.fromEntries(items.map((e) => [e.id, e]));
 }
 
 export function mariaBackground(): BackgroundConfirmData {
-  return { otherNames: 'Maria Elena Ruiz', livedOutsideState: 'no', states: '', authorize: true, helperConsents: { hh_1: true } };
+  return {
+    fingerprintAvailability: [
+      { id: 'fp_1', at: `${daysAhead(5)}T10:00` },
+      { id: 'fp_2', at: `${daysAhead(7)}T14:30` },
+    ],
+    otherNames: 'Maria Elena Ruiz', livedOutsideState: 'no', states: '', authorize: true, helperConsents: { hh_1: true },
+  };
 }
 
 export function mariaCertificates(): CertificatesData {
@@ -188,17 +205,19 @@ export function informationData(education: EducationData['highestLevel'] = 'asso
 
 // ---------- The three seed requests ----------
 
-/** 1. In progress: Information approved, Background check open with consent not yet given. */
+/** 1. In progress: Information signed and approved, Background check open with consent not yet given. */
 function seedInProgress(): ProviderRequest {
   const r = emptyRequest('req_in_progress', 21);
   r.title = 'Onboarding – Home Care Provider';
   r.modules[0] = {
     ...r.modules[0],
     status: 'approved',
+    dataSubmittedAt: stamp(9, 15),
     submittedAt: stamp(9, 16),
     approvedAt: stamp(6, 11),
     data: informationData('associate'),
     uploads: mariaInfoUploads(10),
+    esigns: mariaESigns(9),
   };
   r.modules[1] = { ...r.modules[1], status: 'open', backgroundCheckCleared: false };
   return recomputeStatus(r);
@@ -220,16 +239,24 @@ function seedNeedsAttention(): ProviderRequest {
   return recomputeStatus(r);
 }
 
-/** 3. Completed: every module approved, every e-sign signed, HR approved. */
+/** 3. Completed: every module approved, every document signed, HR approved. */
 export function seedCompleted(id = 'req_completed'): ProviderRequest {
   const r = emptyRequest(id, 140);
   r.title = 'Onboarding – Licensed Home Health Nurse';
   r.modules = [
-    { ...r.modules[0], status: 'approved', submittedAt: stamp(130), approvedAt: stamp(127), data: informationData('nursing_degree'), uploads: mariaInfoUploads(131) },
-    { ...r.modules[1], status: 'approved', submittedAt: stamp(126), approvedAt: stamp(126), backgroundCheckCleared: true, data: { confirm: mariaBackground() } },
-    { ...r.modules[2], status: 'approved', submittedAt: stamp(124), approvedAt: stamp(124), esigns: mariaESigns(124) },
     {
-      ...r.modules[3],
+      ...r.modules[0],
+      status: 'approved',
+      dataSubmittedAt: stamp(130),
+      submittedAt: stamp(130),
+      approvedAt: stamp(127),
+      data: informationData('nursing_degree'),
+      uploads: mariaInfoUploads(131),
+      esigns: mariaESigns(130),
+    },
+    { ...r.modules[1], status: 'approved', submittedAt: stamp(126), approvedAt: stamp(126), backgroundCheckCleared: true, data: { confirm: mariaBackground() } },
+    {
+      ...r.modules[2],
       status: 'approved',
       submittedAt: stamp(122),
       approvedAt: stamp(118),
@@ -237,7 +264,7 @@ export function seedCompleted(id = 'req_completed'): ProviderRequest {
       uploads: mariaTrainingUploads(122, true),
       esigns: { licensed_attestation: signed('licensed_attestation', 'Licensed Provider Attestation', true, 122) },
     },
-    { ...r.modules[4], status: 'approved', submittedAt: stamp(118), approvedAt: stamp(112) },
+    { ...r.modules[3], status: 'approved', submittedAt: stamp(118), approvedAt: stamp(112) },
   ];
   return recomputeStatus(r);
 }

@@ -1,4 +1,4 @@
-import { AlertCircle, ClipboardCheck, FileSignature, GraduationCap, ShieldCheck, UserRound, type LucideIcon } from 'lucide-react';
+import { AlertCircle, ClipboardCheck, GraduationCap, ShieldCheck, UserRound, type LucideIcon } from 'lucide-react';
 import type { ModuleId } from '@/domain/types';
 import type { ModuleModel } from '@/domain/progress';
 import { moduleStatusSpec, type StatusSpec, type Tone } from '@/components/shared/status';
@@ -18,11 +18,12 @@ export function moduleStatusText(model: ModuleModel, previousTitle?: string): st
     case 'locked_future':
       return previousTitle ? `Complete ${previousTitle} first` : 'Locked';
     case 'open':
-      if (model.flagged) return `${plural(model.issueCount)} ${model.issueCount === 1 ? 'needs' : 'need'} attention`;
+      if (model.flagged) return `${plural(model.problemCount)} ${model.problemCount === 1 ? 'needs' : 'need'} attention`;
       if (total === 1) return model.issueCount ? `${plural(model.issueCount)} to complete` : 'Ready to submit';
       return `${done} of ${total} steps complete`;
     case 'rejected':
-      return `${plural(model.issueCount)} ${model.issueCount === 1 ? 'needs' : 'need'} attention`;
+      if (model.problemCount) return `${plural(model.problemCount)} ${model.problemCount === 1 ? 'needs' : 'need'} attention`;
+      return model.issueCount ? `${plural(model.issueCount)} to complete` : 'Ready to submit';
     case 'in_review':
       return m.id === 'hr_review' ? `With HR since ${formatDate(m.submittedAt)}` : `In review since ${formatDate(m.submittedAt)}`;
     case 'approved':
@@ -65,7 +66,6 @@ const MODULE_GREEN = { fg: '#03682F', bg: '#E9F5E5', wash: '#F4FAF1', ink: '#005
 export const MODULE_HUES: Record<ModuleId, { fg: string; bg: string; wash: string; ink: string }> = {
   information: MODULE_GREEN,
   background_check: MODULE_GREEN,
-  esign: MODULE_GREEN,
   training: MODULE_GREEN,
   hr_review: MODULE_GREEN,
 };
@@ -73,7 +73,6 @@ export const MODULE_HUES: Record<ModuleId, { fg: string; bg: string; wash: strin
 export const MODULE_ICONS: Record<ModuleId, LucideIcon> = {
   information: UserRound,
   background_check: ShieldCheck,
-  esign: FileSignature,
   training: GraduationCap,
   hr_review: ClipboardCheck,
 };
@@ -85,7 +84,7 @@ export function moduleRailMeta(model: ModuleModel): { text: string; tone: Tone }
   if (s === 'approved') return { text: 'Approved', tone: 'success' };
   if (s === 'in_review') return { text: 'In review', tone: 'info' };
   if (s === 'revert_requested') return { text: 'Change requested', tone: 'warning' };
-  if (model.flagged) return { text: `${model.issueCount} to fix`, tone: 'danger' };
+  if (model.flagged) return { text: `${model.problemCount} to fix`, tone: 'danger' };
   return { text: `${model.done}/${model.total}`, tone: 'success' };
 }
 

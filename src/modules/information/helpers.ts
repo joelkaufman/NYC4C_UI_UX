@@ -29,7 +29,7 @@ export const addressHelper: HelperDef = {
     bullets: [
       'Start with your current address and the date you started living there.',
       'Add each previous address with the date you moved in. Its move-out date fills in from the address after it.',
-      'Keep adding addresses until Addresses validated shows Yes.',
+      'Keep adding addresses until Prior years needed shows 0 years.',
     ],
   },
 };

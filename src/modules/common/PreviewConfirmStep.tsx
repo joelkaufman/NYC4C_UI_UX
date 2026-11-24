@@ -1,12 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 import { AlertTriangle, CheckCircle2, FileSignature, FileText } from 'lucide-react';
 import type { PreviewSection, StepProps } from '@/domain/types';
+import { isDataEditable, isSigning } from '@/domain/lifecycle';
 import { allIssues } from '@/domain/validation';
 import { stepHref } from '@/domain/progress';
 import { IssueList } from '@/components/shared/IssueList';
 import { ReadOnlyField } from '@/components/shared/fields';
 import { esignStatusSpec, StatusBadge, uploadStatusSpec } from '@/components/shared/status';
 import { cn } from '@/lib/utils';
+import { SignDocuments } from './SignDocuments';
 
 export function PreviewSectionCard({
   section,
@@ -47,17 +49,24 @@ export function PreviewSectionCard({
 }
 
 /**
- * Generic last step: every step's preview sections read-only, uploads and e-signs with
+ * Generic review step: every step's preview sections read-only, uploads and e-signs with
  * status, and the module's issue list with jump links. Submit lives in the footer.
+ * Once the module is submitted it doubles as the summary of everything done in it.
  */
 export function PreviewConfirmStep({ request, instance, moduleDef }: StepProps) {
   const navigate = useNavigate();
   const validation = moduleDef.validate(instance, request);
   const titles = Object.fromEntries(moduleDef.steps.map((s) => [s.id, s.title]));
-  const issueRefs = allIssues(validation).map(({ stepId, issue }) => ({ stepId, stepTitle: titles[stepId], issue }));
+  // Documents signed on a step of their own come after this one, so they are not listed as things to fix first.
+  const signSteps = new Set(moduleDef.steps.filter((s) => s.kind === 'esign').map((s) => s.id));
+  const issueRefs = allIssues(validation)
+    .filter(({ stepId }) => !signSteps.has(stepId))
+    .map(({ stepId, issue }) => ({ stepId, stepTitle: titles[stepId], issue }));
   const uploads = moduleDef.uploadSlots(request);
-  const esigns = moduleDef.esignItems(request);
-  const editable = instance.status === 'open' || instance.status === 'rejected';
+  const allSigns = moduleDef.esignItems(request);
+  const signLater = allSigns.filter((d) => signSteps.has(d.stepId));
+  const esigns = allSigns.filter((d) => !signSteps.has(d.stepId));
+  const editable = isDataEditable(instance);
 
   return (
     <>
@@ -69,7 +78,11 @@ export function PreviewConfirmStep({ request, instance, moduleDef }: StepProps) 
             <CheckCircle2 className="h-4 w-4 shrink-0" aria-hidden />
             <span>
               <span className="font-semibold">Everything is complete.</span>{' '}
-              <span className="text-neutral-700">{moduleDef.requiresReview ? 'Submit to send this module to HR for review.' : 'Submit to continue.'}</span>
+              <span className="text-neutral-700">{signLater.length
+                  ? 'Submit your information, then sign your documents on the next step.'
+                  : moduleDef.requiresReview
+                    ? 'Submit to send this module to HR for review.'
+                    : 'Submit to continue.'}</span>
             </span>
           </div>
         )
@@ -153,6 +166,9 @@ export function PreviewConfirmStep({ request, instance, moduleDef }: StepProps) 
           </ul>
         </div>
       ) : null}
+
+      {/* The summary shows the signed documents; until the module is sent they live on their own step. */}
+      {editable || isSigning(instance) ? null : <SignDocuments request={request} instance={instance} defs={signLater} title="Signed documents" />}
     </>
   );
 }

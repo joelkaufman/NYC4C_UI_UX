@@ -38,7 +38,7 @@ The mechanism that distinguishes this portal from a generic form builder or onbo
 
 ## Operating Context
 
-- **Processes and modules (seed onboarding):** Information (review required) → Background check (no review, admin "cleared" chip is informational) → E-sign (auto-completes when required items are signed) → Training & Certificates (review required) → HR review (admin-only, auto-submits to in_review on unlock, completion screen when approved). Full step lists in PROMPT.md §6.
+- **Processes and modules (seed onboarding):** Information (review required; Review & submit submits the data first, then the last step, Sign documents, collects the e-signatures before it goes to HR) → Background check (no review, admin "cleared" chip is informational) → Training & Certificates (review required) → HR review (admin-only, auto-submits to in_review on unlock, completion screen when approved). Full step lists in PROMPT.md §6.
 - **Module lifecycle:** `locked_future` → `open` → (`in_review` → `rejected` → resubmit) → `approved` → `revert_requested` → back to `open` with later modules re-locked. Rules in PROMPT.md §4.
 - **Uploads:** per-slot label, description, required flag, accepted types, max size, status (`missing` / `uploaded` / `rejected` / `accepted`); mock storage keeps name/size/type and an object URL with a placeholder fallback after reload.
 - **E-sign:** `preparing` → `waiting_for_signature` → `signed`, or `rejected` → "Request new document" back to `preparing`. Mock provider flips to waiting after ~1.5s and signs after ~800ms. No signing UI, state buttons only.

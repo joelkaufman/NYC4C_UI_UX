@@ -73,6 +73,16 @@ export const api = {
     return call(() => s().submitModule(requestId, moduleId));
   },
 
+  /** Submit a module's data ahead of signing; its documents are prepared from it. */
+  submitModuleData(requestId: string, moduleId: ModuleId) {
+    return call(() => s().submitModuleData(requestId, moduleId));
+  },
+
+  /** Go back from signing to editing the module's data. */
+  reopenModuleData(requestId: string, moduleId: ModuleId) {
+    return call(() => s().reopenModuleData(requestId, moduleId));
+  },
+
   requestRevert(requestId: string, moduleId: ModuleId, reason: string) {
     return call(() => s().requestRevert(requestId, moduleId, reason));
   },

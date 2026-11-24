@@ -121,7 +121,7 @@ export function ESignItem({
     >
       <div className="flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:p-5">
         <div className="flex min-w-0 flex-1 items-start gap-3">
-          <div className="mt-0.5 flex h-9 w-6 shrink-0 items-center justify-center" style={{ color: MODULE_HUES.esign.fg }}>
+          <div className="mt-0.5 flex h-9 w-6 shrink-0 items-center justify-center" style={{ color: MODULE_HUES.information.fg }}>
             <FileSignature className="h-5 w-5" aria-hidden />
           </div>
           <div className="min-w-0">

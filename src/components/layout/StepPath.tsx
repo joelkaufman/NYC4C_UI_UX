@@ -47,6 +47,20 @@ export function StepPath({
   label: string;
 }) {
   const refs = React.useRef<(HTMLButtonElement | null)[]>([]);
+  const navRef = React.useRef<HTMLElement>(null);
+  // Keep the current step in view when the path is wider than its container.
+  // Scrolls the path itself rather than using scrollIntoView, which would also move the page.
+  React.useEffect(() => {
+    const nav = navRef.current;
+    const el = refs.current[steps.findIndex((s) => s.step.id === currentStepId)];
+    if (!nav || !el) return;
+    const navBox = nav.getBoundingClientRect();
+    const box = el.getBoundingClientRect();
+    if (box.left >= navBox.left && box.right <= navBox.right) return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    nav.scrollTo({ left: nav.scrollLeft + box.left - navBox.left - (navBox.width - box.width) / 2, behavior: reduce ? 'auto' : 'smooth' });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentStepId, steps.length]);
   const onKeyDown = (e: React.KeyboardEvent, i: number) => {
     let next = -1;
     if (e.key === 'ArrowRight') next = Math.min(steps.length - 1, i + 1);
@@ -60,7 +74,7 @@ export function StepPath({
   };
 
   return (
-    <nav aria-label={label} className="min-w-0 overflow-x-auto">
+    <nav ref={navRef} aria-label={label} className="min-w-0 overflow-x-auto">
       <ol className="flex items-stretch">
         {steps.map((s, i) => {
           const current = s.step.id === currentStepId;

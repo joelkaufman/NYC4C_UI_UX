@@ -32,7 +32,7 @@ export const trainingModule: ModuleDef = {
     },
     {
       id: 'preview',
-      title: 'Preview & confirm',
+      title: 'Submit & sign',
       description: 'Check everything, then submit to HR.',
       kind: 'preview',
       component: PreviewConfirmStep,

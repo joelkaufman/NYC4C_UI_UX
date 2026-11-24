@@ -1,26 +1,37 @@
 import { useFormContext } from 'react-hook-form';
 import { z } from 'zod';
 import { CheckCircle2, Clock } from 'lucide-react';
-import type { BackgroundConfirmData } from '@/domain/data';
+import type { BackgroundConfirmData, FingerprintSlot } from '@/domain/data';
 import type { ModuleInstance, PreviewSection, ProviderRequest, StepProps } from '@/domain/types';
 import { getPersonal, householdAdults, stepData } from '@/domain/conditions';
 import { isBlank, issuesFromSchema, requireKeys, stepSchema } from '@/domain/validation';
 import { Section } from '@/components/shared/Section';
 import { StepForm, useBind } from '@/components/shared/step-context';
-import { CheckboxField, RadioGroupField, ReadOnlyField, TextareaField, TextField, YES_NO } from '@/components/shared/fields';
+import { CheckboxField, DateTimeField, RadioGroupField, ReadOnlyField, TextareaField, TextField, YES_NO } from '@/components/shared/fields';
+import { RepeatableList } from '@/components/shared/RepeatableList';
 import { AddressTimeline } from '@/components/shared/AddressTimeline';
 import { COMPANY_NAME } from '@/config';
 import type { AddressesData } from '@/domain/data';
-import { maskSSN } from '@/lib/format';
+import { formatDateTime, maskSSN, todayIso, uid } from '@/lib/format';
 import { useStore } from '@/mock/store';
 import { toTimeline } from '@/modules/information/address-history';
 import { memberName } from '@/modules/information/HouseholdStep';
+import { fullName } from '@/modules/information/PersonalInfoStep';
+
+const MAX_FINGERPRINT_SLOTS = 3;
 
 export function buildSchema(request: ProviderRequest) {
   const helpers = householdAdults(request);
   return stepSchema<BackgroundConfirmData>((d, ctx) => {
     requireKeys(ctx, d, { livedOutsideState: 'Answer whether you lived outside the state in the last 5 years' });
     if (d.livedOutsideState === 'yes') requireKeys(ctx, d, { states: 'List the states you lived in' });
+    const slots = d.fingerprintAvailability ?? [];
+    if (!slots.length) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['fingerprintAvailability'], message: 'Add at least one date and time you are available for fingerprinting' });
+    }
+    slots.forEach((s, i) =>
+      requireKeys(ctx, s as unknown as Record<string, unknown>, { at: 'Choose a date and time' }, ['fingerprintAvailability', i]),
+    );
     if (!d.authorize) {
       ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['authorize'], message: 'Authorize the background check' });
     }
@@ -40,6 +51,10 @@ export function previewSections(data: unknown, request: ProviderRequest): Previe
   const d = (data ?? {}) as Partial<BackgroundConfirmData>;
   const helpers = householdAdults(request);
   return [
+    {
+      title: 'Fingerprint availability',
+      items: (d.fingerprintAvailability ?? []).map((s, i) => ({ label: `Option ${i + 1}`, value: formatDateTime(s.at) })),
+    },
     {
       title: 'Background check answers',
       items: [
@@ -65,7 +80,7 @@ function Summary({ request }: { request: ProviderRequest }) {
         <span className="text-xs text-muted-foreground">To change these, request changes to Information.</span>
       </div>
       <div className="mt-4 grid gap-x-6 gap-y-4 sm:grid-cols-3">
-        <ReadOnlyField label="Name" value={provider.name} />
+        <ReadOnlyField label="Name" value={fullName(p) || provider.name} />
         <ReadOnlyField label="Maiden or alias names" value={p.usedAlias === 'yes' ? p.aliasNames : p.usedAlias === 'no' ? 'None' : ''} />
         <ReadOnlyField label="Social Security number" value={maskSSN(p.ssn)} />
       </div>
@@ -98,6 +113,23 @@ function Fields({ request }: { request: ProviderRequest }) {
   const helpers = householdAdults(request);
   return (
     <>
+      <Section
+        title="Fingerprint availability"
+        description={`Give up to ${MAX_FINGERPRINT_SLOTS} dates and times you could attend a fingerprint appointment.`}
+        fields={['fingerprintAvailability']}
+      >
+        <RepeatableList<FingerprintSlot>
+          name="fingerprintAvailability"
+          noun="option"
+          addLabel="Add date and time"
+          emptyText="No dates and times added yet."
+          max={MAX_FINGERPRINT_SLOTS}
+          create={() => ({ id: uid('fp'), at: '' })}
+          summary={(s, i) => ({ title: formatDateTime(s.at) || 'New option', meta: `Option ${i + 1}` })}
+          renderEditor={(i) => <DateTimeField {...bind(`fingerprintAvailability.${i}.at`)} label="Date and time" required min={`${todayIso()}T00:00`} />}
+          renderReadOnly={(s) => <ReadOnlyField label="Date and time" value={formatDateTime(s.at)} />}
+        />
+      </Section>
       <Section title="Your answers" fields={['otherNames', 'livedOutsideState', 'states']}>
         <TextField {...bind('otherNames')} label="Other names used in the last 7 years" help="Optional. Include maiden names and legal name changes." />
         <RadioGroupField {...bind('livedOutsideState')} label="Have you lived outside the state in the last 5 years?" required options={YES_NO} />
@@ -142,7 +174,7 @@ export function ConfirmStep({ request, instance, readOnly, step }: StepProps) {
         requestId={request.id}
         moduleId={instance.id}
         stepId={step.id}
-        defaults={{ otherNames: '', livedOutsideState: '', states: '', authorize: false, helperConsents: {} }}
+        defaults={{ fingerprintAvailability: [], otherNames: '', livedOutsideState: '', states: '', authorize: false, helperConsents: {} }}
         saved={instance.data[step.id]}
         readOnly={readOnly}
       >

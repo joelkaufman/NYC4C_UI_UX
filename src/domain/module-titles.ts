@@ -8,7 +8,6 @@ import type { ModuleId } from './types';
 export const MODULE_TITLES: Record<ModuleId, string> = {
   information: 'Information',
   background_check: 'Background check',
-  esign: 'E-sign',
   training: 'Training & Certificates',
   hr_review: 'HR review',
 };

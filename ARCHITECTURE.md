@@ -16,7 +16,7 @@ Drafts save to the store 300ms after each change and immediately on blur, so iss
    - the component, receiving `StepProps`;
    - `schema`, built with `stepSchema` and `requireKeys` from `src/domain/validation.ts`;
    - `issues(data, instance, request)`, usually `issuesFromSchema(schema, data)` plus `uploadIssues` or `esignIssues`;
-   - `previewSections(data, request)` if the step should appear on Preview & confirm.
+   - `previewSections(data, request)` if the step should appear on Submit & sign.
 2. Wrap form content in `StepForm` and bind fields with `useBind()`:
    ```tsx
    const bind = useBind();

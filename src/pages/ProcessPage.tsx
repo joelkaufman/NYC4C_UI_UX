@@ -2,8 +2,8 @@ import * as React from 'react';
 import { Link, Navigate, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import type { ModuleId } from '@/domain/types';
-import { currentModuleId, isEditable } from '@/domain/lifecycle';
-import { buildModuleModel, landingTarget, moduleLandingStep, stepHref, stepProgress } from '@/domain/progress';
+import { currentModuleId, isDataEditable, isSigning } from '@/domain/lifecycle';
+import { buildModuleModel, landingTarget, lockedStep, moduleLandingStep, stepHref, stepProgress } from '@/domain/progress';
 import { useRequest, useStore, visitKey } from '@/mock/store';
 import { api } from '@/mock/api';
 import { toast } from '@/components/ui/use-toast';
@@ -137,15 +137,20 @@ export function ProcessPage() {
     const t = landingTarget(request);
     return <Navigate to={stepHref(request.id, t.moduleId, t.stepId)} replace />;
   }
-  // Completed modules show only their last step (the summary); earlier step links redirect there.
-  const lastStep = model.def.steps[model.def.steps.length - 1];
-  if (!step || (!isEditable(instance.status) && step.id !== lastStep.id && layout !== 'scroll')) {
+  // Sent modules show one step only (the summary); other step links redirect there.
+  // While signing, every step stays reachable (read-only) so the provider can see where they are.
+  const onlyStep = lockedStep(model.def, instance);
+  if (!step || (!isDataEditable(instance) && !isSigning(instance) && step.id !== onlyStep.id && layout !== 'scroll')) {
     return <Navigate to={stepHref(request.id, instance.id, moduleLandingStep(request, instance))} replace />;
   }
 
   const def = model.def;
-  const editable = isEditable(instance.status);
+  // Signing: the data is submitted and locked, and the module's last step collects the signatures.
+  const signing = isSigning(instance);
+  const editable = isDataEditable(instance);
   const readOnly = !editable;
+  /** The step path is shown and its steps can be opened. */
+  const browsable = editable || signing;
   const stepIndex = def.steps.indexOf(step);
   const stepStatus = model.steps[stepIndex];
   const showAll = revealAll || !!focus || !!visited[visitKey(request.id, instance.id, step.id)] || instance.status === 'rejected';
@@ -171,19 +176,57 @@ export function ProcessPage() {
     }
   };
 
-  // Footer primary action
-  let primary: FooterPrimary | undefined;
-  if (editable && (step.kind === 'preview' || step.kind === 'confirm' || step.kind === 'esign')) {
-    const label =
-      step.kind === 'esign' ? 'Finish' : step.kind === 'confirm' ? 'Submit' : instance.status === 'rejected' ? 'Resubmit module' : 'Submit module';
-    primary = {
-      label,
+  const submitData = async () => {
+    setSubmitting(true);
+    try {
+      await api.submitModuleData(request.id, instance.id);
+      toast({ variant: 'success', title: `${def.title} submitted`, description: 'Your documents are being prepared. Sign them to finish.' });
+    } catch (e) {
+      toast({ variant: 'destructive', title: 'Submit failed', description: (e as Error).message });
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  // Everything except the signatures, which are collected on their own step after the data is submitted.
+  const signStep = previewStep ? def.steps.find((s) => s.kind === 'esign') : undefined;
+  const dataIssueCount = model.steps.reduce((n, s) => n + (s.step.kind === 'preview' || s.step === signStep ? 0 : s.issues.length), 0);
+  const dataComplete = dataIssueCount === 0;
+
+  /** Primary action of the module's submit step: submit the data, then sign, then send. */
+  const submitPrimary = (s: StepDef): FooterPrimary => {
+    if (signing) {
+      return {
+        label: def.requiresReview ? 'Send to HR' : 'Finish',
+        onClick: submit,
+        disabled: !model.validation.isComplete,
+        loading: submitting,
+        hint: model.validation.isComplete ? undefined : 'Sign every required document first',
+      };
+    }
+    if (s.kind === 'preview' && signStep) {
+      return {
+        label: instance.status === 'rejected' ? 'Resubmit information' : 'Submit information',
+        onClick: submitData,
+        disabled: !dataComplete,
+        loading: submitting,
+        hint: dataComplete ? undefined : 'Resolve the items that need attention first',
+      };
+    }
+    return {
+      label: s.kind === 'esign' ? 'Finish' : s.kind === 'confirm' ? 'Submit' : instance.status === 'rejected' ? 'Resubmit module' : 'Submit module',
       onClick: submit,
       disabled: !model.validation.isComplete,
       loading: submitting,
       hint: model.validation.isComplete ? undefined : 'Resolve the items that need attention first',
     };
-  } else if (stepIndex < def.steps.length - 1) {
+  };
+
+  // Footer primary action
+  let primary: FooterPrimary | undefined;
+  if ((signing && step === onlyStep) || (editable && step !== signStep && (step.kind === 'preview' || step.kind === 'confirm' || step.kind === 'esign'))) {
+    primary = submitPrimary(step);
+  } else if (browsable && stepIndex < def.steps.length - 1) {
     primary = { label: 'Next', onClick: () => go(def.steps[stepIndex + 1].id), arrow: true };
   } else if (readOnly && nextModule && nextModule.status !== 'locked_future') {
     primary = { label: `Go to ${models[moduleIdx + 1].def.title}`, onClick: () => navigate(stepHref(request.id, nextModule.id)), arrow: true };
@@ -191,19 +234,14 @@ export function ProcessPage() {
 
   const submitStep = def.steps.find((s) => s.kind === 'preview' || s.kind === 'confirm' || s.kind === 'esign');
   let scrollPrimary: FooterPrimary | undefined;
-  if (editable && submitStep) {
-    scrollPrimary = {
-      label: submitStep.kind === 'esign' ? 'Finish' : submitStep.kind === 'confirm' ? 'Submit' : instance.status === 'rejected' ? 'Resubmit module' : 'Submit module',
-      onClick: submit,
-      disabled: !model.validation.isComplete,
-      loading: submitting,
-    };
+  if ((editable || signing) && submitStep) {
+    scrollPrimary = submitPrimary(submitStep);
   } else if (readOnly && nextModule && nextModule.status !== 'locked_future') {
     scrollPrimary = { label: `Go to ${models[moduleIdx + 1].def.title}`, onClick: () => navigate(stepHref(request.id, nextModule.id)), arrow: true };
   }
 
   // Attention jump: cycle this step's issues, then move to the next step that has any.
-  const attention = editable && step.kind !== 'preview' ? model.issueCount : 0;
+  const attention = editable && step.kind !== 'preview' ? dataIssueCount : 0;
   const onAttention = () => {
     const here = stepStatus.issues;
     if (here.length) {
@@ -218,7 +256,8 @@ export function ProcessPage() {
     if (next) go(next.step.id, next.issues[0].targetId);
   };
 
-  const hasBanner = ['rejected', 'in_review', 'approved', 'revert_requested'].includes(instance.status);
+  // Once the information is resubmitted, HR's rejection has been dealt with; don't keep showing it while signing.
+  const hasBanner = ['rejected', 'in_review', 'approved', 'revert_requested'].includes(instance.status) && !(signing && instance.status === 'rejected');
   const banner =
     !hasBanner || (instance.id === 'hr_review' && instance.status !== 'approved') ? null : (
       <ModuleBanner
@@ -276,14 +315,14 @@ export function ProcessPage() {
         requestTitle={request.title}
         models={models}
         viewed={model}
-        steps={editable ? model.steps : model.steps.slice(-1)}
+        steps={browsable ? model.steps : model.steps.filter((s) => s.step === onlyStep)}
         currentStepId={step.id}
         onSelectStep={(sid) => go(sid)}
       />
 
       {layout === 'scroll' ? (
         <ScrollModuleView
-          key={`${instance.id}:${dataVersion}:${instance.status}`}
+          key={`${instance.id}:${dataVersion}:${instance.status}:${instance.dataSubmittedAt ?? ''}`}
           request={request}
           models={models}
           model={model}
@@ -330,7 +369,7 @@ export function ProcessPage() {
                   </div>
                 </div>
               </div>
-              {model.steps.length > 1 && editable ? (
+              {model.steps.length > 1 && browsable ? (
                 <div className="sticky top-14 z-10 hidden border-b bg-card px-3 lg:block lg:px-5">
                   <StepPath steps={model.steps} currentStepId={step.id} onSelect={(sid) => go(sid)} label={`Steps in ${def.title}`} />
                 </div>
@@ -346,10 +385,12 @@ export function ProcessPage() {
                     ? 'Onboarding complete'
                     : step.title
               }
-              titleInTabs={layout === 'classic' && model.steps.length > 1 && editable}
+              titleInTabs={layout === 'classic' && model.steps.length > 1 && browsable}
               description={
                 step.kind === 'preview' && readOnly
-                  ? `Everything in ${def.title} as HR received it. Read only.`
+                  ? signing
+                    ? `Everything in ${def.title} as you submitted it. Read only.`
+                    : `Everything in ${def.title} as HR received it. Read only.`
                   : instance.id === 'hr_review' && instance.status === 'approved'
                     ? 'Thank you for completing every module.'
                     : step.description
@@ -359,14 +400,14 @@ export function ProcessPage() {
               meta={instance.id === 'background_check' && instance.status === 'approved' ? <BackgroundClearedChip instance={instance} /> : undefined}
               footer={
                 <StepFooter
-                  onBack={stepIndex > 0 && editable ? () => go(def.steps[stepIndex - 1].id) : undefined}
+                  onBack={stepIndex > 0 && browsable ? () => go(def.steps[stepIndex - 1].id) : undefined}
                   primary={primary}
                   attention={attention}
                   attentionTone={model.flagged ? 'danger' : 'neutral'}
                   onAttention={onAttention}
-                  progress={editable && step.kind !== 'preview' ? stepProgress(step, instance, request) : undefined}
+                  progress={(editable || (signing && step === onlyStep)) && step.kind !== 'preview' ? stepProgress(step, instance, request) : undefined}
                   note={
-                    editable && model.validation.isComplete && previewStep && step.id !== previewStep.id ? (
+                    editable && dataComplete && previewStep && step.id !== previewStep.id ? (
                       <button
                         type="button"
                         onClick={() => go(previewStep.id)}
@@ -383,7 +424,7 @@ export function ProcessPage() {
               }
             >
               <StepComponent
-                key={`${dataVersion}:${instance.status}`}
+                key={`${dataVersion}:${instance.status}:${instance.dataSubmittedAt ?? ''}`}
                 request={request}
                 instance={instance}
                 moduleDef={def}
@@ -453,7 +494,9 @@ function ScrollModuleView({
     onRevealAll();
     window.setTimeout(() => focusTarget(target), 40);
   };
-  const flaggedItems = model.steps.flatMap((s) => s.issues.map((issue) => ({ stepId: s.step.id, stepTitle: s.step.title, issue })));
+  // Documents signed on their own step come after the data is submitted, so they are not listed to fix.
+  const signStep = def.steps.some((s) => s.kind === 'preview') ? def.steps.find((s) => s.kind === 'esign') : undefined;
+  const flaggedItems = model.steps.filter((s) => s.step !== signStep).flatMap((s) => s.issues.map((issue) => ({ stepId: s.step.id, stepTitle: s.step.title, issue })));
   const editable = !readOnly;
 
   const renderStep = (s: StepDef, index: number) => {
@@ -474,7 +517,7 @@ function ScrollModuleView({
                 </div>
               )
             ) : (
-              <p className="text-sm text-muted-foreground">This module is locked.</p>
+              <p className="text-sm text-muted-foreground">Your information is locked.</p>
             )}
           </div>
         </section>
@@ -515,7 +558,7 @@ function ScrollModuleView({
         </div>
         <StepFooter
           primary={primary}
-          attention={editable ? model.issueCount : 0}
+          attention={editable ? flaggedItems.length : 0}
           attentionTone={model.flagged ? 'danger' : 'neutral'}
           onAttention={() => flaggedItems[0] && jump(flaggedItems[0].stepId, flaggedItems[0].issue.targetId)}
           note={note}

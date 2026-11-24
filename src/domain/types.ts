@@ -15,11 +15,19 @@ export type UploadStatus = 'missing' | 'uploaded' | 'rejected' | 'accepted';
 
 export type ESignStatus = 'preparing' | 'waiting_for_signature' | 'signed' | 'rejected';
 
-export type ModuleId = 'information' | 'background_check' | 'esign' | 'training' | 'hr_review';
+export type ModuleId = 'information' | 'background_check' | 'training' | 'hr_review';
 
 export interface Provider {
   name: string;
   email: string;
+}
+
+/** Application details set by staff; the provider sees them read-only. */
+export interface ApplicationInfo {
+  position: string;
+  credentials: string;
+  channel: string;
+  division: string;
 }
 
 export interface ProviderRequest {
@@ -28,6 +36,7 @@ export interface ProviderRequest {
   processType: 'onboarding';
   createdAt: string;
   status: RequestStatus;
+  application: ApplicationInfo;
   modules: ModuleInstance[];
 }
 
@@ -38,6 +47,8 @@ export interface ModuleInstance {
   rejectionMessage?: string;
   revertRequest?: { reason: string; requestedAt: string };
   revertDeclineNote?: string;
+  /** Set when the module's data is submitted ahead of signing its documents; the data is locked from then on. */
+  dataSubmittedAt?: string;
   submittedAt?: string;
   approvedAt?: string;
   /** Background check only: informational "cleared" flag toggled by admin. */

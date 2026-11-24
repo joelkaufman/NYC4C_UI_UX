@@ -12,7 +12,9 @@ import {
   approveModule,
   recomputeStatus,
   reopenModule,
+  reopenModuleData,
   submitModule as submitModuleRule,
+  submitModuleData,
   withModule,
 } from '@/domain/lifecycle';
 import { nowIso } from '@/lib/format';
@@ -47,6 +49,8 @@ export interface StoreState {
   setUpload(requestId: string, moduleId: ModuleId, item: UploadItem): void;
   removeUpload(requestId: string, moduleId: ModuleId, slotId: string): void;
   submitModule(requestId: string, moduleId: ModuleId): void;
+  submitModuleData(requestId: string, moduleId: ModuleId): void;
+  reopenModuleData(requestId: string, moduleId: ModuleId): void;
   requestRevert(requestId: string, moduleId: ModuleId, reason: string): void;
   addESign(requestId: string, moduleId: ModuleId, item: ESignItem): void;
   signESign(requestId: string, moduleId: ModuleId, esignId: string, signedAt: string): void;
@@ -111,6 +115,10 @@ export const useStore = create<StoreState>()(
           ),
 
         submitModule: (requestId, moduleId) => update(requestId, (r) => submitModuleRule(r, moduleId, nowIso())),
+
+        submitModuleData: (requestId, moduleId) => update(requestId, (r) => submitModuleData(r, moduleId, nowIso())),
+
+        reopenModuleData: (requestId, moduleId) => update(requestId, (r) => reopenModuleData(r, moduleId)),
 
         requestRevert: (requestId, moduleId, reason) =>
           update(requestId, (r) =>
@@ -248,7 +256,9 @@ export const useStore = create<StoreState>()(
     {
       name: STORE_KEY,
       // 2: Information fields replaced from the onboarding fields sheet; older saved data is dropped and reseeded.
-      version: 2,
+      // 3: New Application fields added (name, contact, application details, fingerprint availability).
+      // 4: E-sign module removed; its documents are signed on Information › Submit & sign.
+      version: 4,
       partialize: (s) => ({
         requests: s.requests.map((r) => ({
           ...r,

@@ -1,13 +1,16 @@
+import * as React from 'react';
 import { useFormContext } from 'react-hook-form';
+import { AlertCircle, Pencil, Plus, Trash2 } from 'lucide-react';
 import type { AddressesData, PreviousAddress } from '@/domain/data';
 import type { PreviewSection, StepProps } from '@/domain/types';
 import { issuesFromSchema } from '@/domain/validation';
-import { RepeatableList } from '@/components/shared/RepeatableList';
+import { Button } from '@/components/ui/button';
 import { Section } from '@/components/shared/Section';
-import { StepForm, useBind } from '@/components/shared/step-context';
+import { StepForm, useBind, useStepContext } from '@/components/shared/step-context';
 import { DateField, FieldRow, ReadOnlyField, TextField } from '@/components/shared/fields';
 import { ADDRESS_LOOKBACK_YEARS } from '@/config';
 import { formatDate, todayIso, uid } from '@/lib/format';
+import { cn } from '@/lib/utils';
 import { addressesSchema } from './schema';
 import { addressHelper } from './helpers';
 import { addressHistory, formatYears, moveOutFor, previousWithMoveOut } from './address-history';
@@ -39,9 +42,7 @@ export function previewSections(data: unknown): PreviewSection[] {
         { label: 'Years at current address', value: formatYears(h.yearsAtCurrent) },
         { label: 'Prior years provided', value: formatYears(h.priorYearsProvided) },
         { label: 'Prior years needed', value: formatYears(h.priorYearsNeeded) },
-        { label: 'Addresses validated', targetId: 'previousAddresses', value: h.validated ? 'Yes' : 'No' },
       ],
-      note: h.message || undefined,
     },
     {
       title: 'Previous addresses',
@@ -74,6 +75,143 @@ function PreviousEditor({ index }: { index: number }) {
   );
 }
 
+const NAME = 'previousAddresses';
+
+/** Previous addresses as a table (address, from, to); one row at a time opens an editor beneath it. */
+function PreviousAddressTable() {
+  const { watch, setValue } = useFormContext<AddressesData>();
+  const ctx = useStepContext();
+  const all = watch() as AddressesData;
+  const items = (all.previousAddresses ?? []).filter(Boolean);
+  // Open the row an issue link points at (?focus=previousAddresses.index.field).
+  const [editing, setEditing] = React.useState<string | null>(() => {
+    const m = /^previousAddresses\.(\d+)\./.exec(new URLSearchParams(window.location.search).get('focus') ?? '');
+    return m ? items[Number(m[1])]?.id ?? null : null;
+  });
+  const addRef = React.useRef<HTMLButtonElement>(null);
+  const errorAtList = ctx.errorFor(NAME);
+
+  const add = () => {
+    const item: PreviousAddress = { id: uid('addr'), street: '', city: '', state: '', zip: '', moveIn: '' };
+    setValue(NAME, [...items, item], { shouldDirty: true });
+    setEditing(item.id);
+  };
+  const close = (index: number) => {
+    ctx.reveal(`${NAME}.${index}`);
+    setEditing(null);
+  };
+  const remove = (index: number) => {
+    setValue(NAME, items.filter((_, i) => i !== index), { shouldDirty: true });
+    setEditing(null);
+    requestAnimationFrame(() => addRef.current?.focus());
+  };
+
+  if (ctx.readOnly && !items.length) return <p className="text-sm text-muted-foreground">None added.</p>;
+
+  const th = 'px-3 py-2 text-left text-xs font-medium text-muted-foreground';
+  return (
+    <div className="grid gap-3" id={NAME} tabIndex={-1}>
+      {items.length ? (
+        <div className="overflow-x-auto rounded-xl ring-1 ring-inset ring-[hsl(var(--field-edge))]">
+          <table className="w-full min-w-[30rem] border-collapse text-sm">
+            <thead className="bg-[hsl(var(--field))]">
+              <tr>
+                <th scope="col" className={th}>Address</th>
+                <th scope="col" className={th}>From</th>
+                <th scope="col" className={th}>To</th>
+                {ctx.readOnly ? null : (
+                  <th scope="col" className={th}>
+                    <span className="sr-only">Actions</span>
+                  </th>
+                )}
+              </tr>
+            </thead>
+            <tbody>
+              {items.map((a, i) => {
+                const count = ctx.visibleCount([`${NAME}.${i}`]);
+                const isEditing = editing === a.id;
+                return (
+                  <React.Fragment key={a.id}>
+                    <tr className={cn('border-t align-top', isEditing && 'bg-card')}>
+                      <td className="px-3 py-2.5 text-foreground">
+                        {formatAddress(a) || <span className="text-muted-foreground">New address</span>}
+                        {count > 0 && !isEditing ? (
+                          <p className="mt-1 flex items-center gap-1.5 text-xs text-status-danger-fg">
+                            <AlertCircle className="h-3.5 w-3.5" aria-hidden />
+                            {count === 1 ? '1 item needs attention' : `${count} items need attention`}
+                          </p>
+                        ) : null}
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-2.5 tabular">{formatDate(a.moveIn)}</td>
+                      <td className="whitespace-nowrap px-3 py-2.5 tabular">{formatDate(moveOutFor(all, a.id))}</td>
+                      {ctx.readOnly ? null : (
+                        <td className="px-1 py-1 text-right">
+                          {isEditing ? null : (
+                            <div className="flex justify-end gap-1">
+                              <Button type="button" variant="ghost" size="sm" onClick={() => setEditing(a.id)} aria-label={`Edit address ${i + 1}`}>
+                                <Pencil aria-hidden />
+                                <span className="hidden sm:inline">Edit</span>
+                              </Button>
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => remove(i)}
+                                aria-label={`Remove address ${i + 1}`}
+                                className="text-muted-foreground hover:text-status-danger-fg"
+                              >
+                                <Trash2 aria-hidden />
+                              </Button>
+                            </div>
+                          )}
+                        </td>
+                      )}
+                    </tr>
+                    {isEditing ? (
+                      <tr className="bg-card">
+                        <td colSpan={4} className="px-3 pb-4 pt-1">
+                          <div className="grid gap-4">
+                            <PreviousEditor index={i} />
+                            <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
+                              <Button type="button" variant="ghost" size="sm" onClick={() => remove(i)} className="text-status-danger-fg hover:bg-status-danger-bg">
+                                <Trash2 aria-hidden />
+                                Remove address
+                              </Button>
+                              <Button type="button" variant="outline" size="sm" onClick={() => close(i)}>
+                                Done
+                              </Button>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    ) : null}
+                  </React.Fragment>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <p className="text-sm text-muted-foreground">No previous addresses added yet.</p>
+      )}
+      {ctx.readOnly ? null : (
+        <div>
+          <Button ref={addRef} type="button" variant="outline" size="sm" onClick={add} data-add>
+            <Plus aria-hidden />
+            Add previous address
+          </Button>
+        </div>
+      )}
+      {errorAtList ? (
+        <p className="flex items-center gap-1.5 text-xs text-status-danger-fg">
+          <AlertCircle className="h-3.5 w-3.5" aria-hidden />
+          {errorAtList}
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
 function HistoryCheck() {
   const { watch } = useFormContext<AddressesData>();
   const h = addressHistory(watch() as AddressesData);
@@ -87,8 +225,6 @@ function HistoryCheck() {
         <ReadOnlyField label="Years living at current address" value={formatYears(h.yearsAtCurrent)} />
         <ReadOnlyField label="Prior years provided" value={formatYears(h.priorYearsProvided)} />
         <ReadOnlyField label="Prior years needed" value={formatYears(h.priorYearsNeeded)} />
-        <ReadOnlyField label="Addresses validated" value={h.validated ? 'Yes' : 'No'} />
-        <ReadOnlyField label="Validation message" value={h.message || 'None'} className="sm:col-span-2" />
       </div>
     </Section>
   );
@@ -127,30 +263,7 @@ function Fields() {
         }
         fields={['previousAddresses']}
       >
-        <RepeatableList<PreviousAddress>
-          name="previousAddresses"
-          noun="address"
-          addLabel="Add previous address"
-          emptyText="No previous addresses added yet."
-          create={() => ({ id: uid('addr'), street: '', city: '', state: '', zip: '', moveIn: '' })}
-          summary={(a) => ({
-            title: a.street || 'New address',
-            meta: [
-              [a.city, a.state].filter(Boolean).join(', '),
-              a.moveIn ? `${formatDate(a.moveIn)} – ${formatDate(moveOutFor(all, a.id)) || '…'}` : null,
-            ]
-              .filter(Boolean)
-              .join(' · '),
-          })}
-          renderEditor={(i) => <PreviousEditor index={i} />}
-          renderReadOnly={(a) => (
-            <div className="grid gap-4 sm:grid-cols-2">
-              <ReadOnlyField label="Address" value={formatAddress(a)} className="sm:col-span-2" />
-              <ReadOnlyField label="Move-in date" value={formatDate(a.moveIn)} />
-              <ReadOnlyField label="Move-out date" value={formatDate(moveOutFor(all, a.id))} />
-            </div>
-          )}
-        />
+        <PreviousAddressTable />
       </Section>
     </>
   );
